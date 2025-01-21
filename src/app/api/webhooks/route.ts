@@ -62,12 +62,12 @@ export async function POST(req: Request) {
       clerkUserId: id,
       emailAddress: email_addresses[0].email_address,
     };
+    await connect();
     try {
-      await connect();
       await User.create(newUser);
       console.log('user created');
     } catch (error) {
-      console.log(error);
+      console.error('Error while creating user:', error);
     }
   }
   console.log(`Received webhook with ID ${id} and event type of ${eventType}`);
