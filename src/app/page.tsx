@@ -3,7 +3,7 @@ import React from 'react';
 import { useAuth } from '@clerk/nextjs';
 import { Star, Hash, Clock, Globe } from 'lucide-react';
 import Link from 'next/link';
-import { Logo } from './my-notes/components/Logo/Logo';
+import { Logo } from './my-snippets/components/Logo/Logo';
 
 const Home = () => {
   return (
@@ -34,7 +34,7 @@ const Buttons = () => {
 
   if (userId) {
     return (
-      <Link href="/my-notes" className="w-full sm:w-auto">
+      <Link href="/my-snippets" className="w-full sm:w-auto">
         <button className="w-full sm:w-auto bg-violet-600 hover:bg-violet-700 px-6 py-2 rounded-lg text-white font-medium transition-colors">
           Access The App
         </button>
