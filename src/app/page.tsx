@@ -139,7 +139,9 @@ const Footer = () => {
     <footer className="w-full py-6 px-4 mt-auto ">
       <div className="max-w-7xl mx-auto flex flex-col sm:flex-row justify-between items-center gap-4">
         <div className="flex items-center space-x-4">
-          <p className="text-sm text-gray-600">© {currentYear} Codebin</p>
+          <p className="text-sm text-gray-600">
+            © {currentYear} Codebin by Piyush
+          </p>
           <span className="h-4 w-px bg-gray-300 hidden sm:block" />
           <a
             href="#"
