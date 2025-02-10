@@ -1,8 +1,9 @@
 'use client';
 import React from 'react';
 import { useAuth } from '@clerk/nextjs';
-import { Star, Hash, Clock, Globe, Box } from 'lucide-react';
+import { Star, Hash, Clock, Globe } from 'lucide-react';
 import Link from 'next/link';
+import { Logo } from './my-notes/components/Logo/Logo';
 
 const Home = () => {
   return (
@@ -25,17 +26,6 @@ const Navbar = () => {
         <Buttons />
       </div>
     </nav>
-  );
-};
-
-export const Logo = () => {
-  return (
-    <div className="flex items-center gap-2">
-      <div className="bg-violet-600 p-2 rounded-lg">
-        <Box className="w-6 h-6 text-white" />
-      </div>
-      <span className="text-xl font-bold text-violet-600">Codebin</span>
-    </div>
   );
 };
 

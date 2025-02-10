@@ -1,5 +1,5 @@
 'use client';
-import { Logo } from '@/app/page';
+
 import { useGlobalContext } from '@/ContextApi';
 import { useUser } from '@clerk/nextjs';
 import { useAuth } from '@clerk/clerk-react';
@@ -7,6 +7,7 @@ import { LogOutIcon, X } from 'lucide-react';
 import DarkMode from '../ContentArea/TopBar/DarkMode';
 import getLanguageIcon from '@/app/utils/languageTextToIcon';
 import dynamic from 'next/dynamic';
+import { Logo } from '../Logo/Logo';
 const UserButton = dynamic(
   () => import('@clerk/nextjs').then((mod) => mod.UserButton),
   { ssr: false }
