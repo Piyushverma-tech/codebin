@@ -92,6 +92,7 @@ export default function Sidebar() {
 function QuickLinks() {
   const {
     sideBarMenuObject: { sideBarMenu, setSideBarMenu },
+    openSideBarObject: { setOpenSideBar },
     tagsMenuObject: { tagsMenu },
     openTagsWindowObject: { setOpenTagsWindow },
     openContentNoteObject: { setOpenContentNote },
@@ -120,7 +121,10 @@ function QuickLinks() {
         {sideBarMenu.map((menu, index) => (
           <li
             key={index}
-            onClick={() => clickedMenu(index)}
+            onClick={() => {
+              clickedMenu(index);
+              setOpenSideBar(false);
+            }}
             className={`flex cursor-pointer select-none gap-3 items-center px-3 py-2.5 rounded-lg
             transition-all duration-200
             ${
@@ -144,6 +148,7 @@ function QuickLinks() {
             onClick={() => {
               setOpenTagsWindow(true);
               setOpenContentNote(false);
+              setOpenSideBar(false);
             }}
             className={`flex cursor-pointer select-none gap-3 items-center px-3 py-2.5 rounded-lg
           transition-all duration-200
