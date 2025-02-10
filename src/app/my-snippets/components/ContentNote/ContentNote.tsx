@@ -138,7 +138,7 @@ function ContentNote() {
     <div
       className={` ${
         isMobile
-          ? 'fixed left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-full   z-50'
+          ? 'fixed left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-full py-6  z-50'
           : 'w-1/2'
       } ${
         darkMode[1].isSelected
