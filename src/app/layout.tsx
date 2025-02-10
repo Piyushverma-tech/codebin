@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import { Poppins } from 'next/font/google';
 import './globals.css';
 import { ClerkProvider } from '@clerk/nextjs';
+import GlobalContextProvider from '@/ContextApi';
 
 const poppins = Poppins({
   variable: '--font-poppins',
@@ -21,9 +22,12 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <ClerkProvider>
-        <body className={` ${poppins.className} antialiased`}>{children}</body>
-      </ClerkProvider>
+      <head />
+      <body className={`${poppins.className} antialiased`}>
+        <ClerkProvider>
+          <GlobalContextProvider>{children}</GlobalContextProvider>
+        </ClerkProvider>
+      </body>
     </html>
   );
 }
