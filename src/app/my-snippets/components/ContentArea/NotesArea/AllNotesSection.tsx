@@ -37,22 +37,13 @@ function AllNotesSection() {
     // Sidebar filter logic
     if (sideBarMenu[0].isSelected) {
       notes = notes.filter((note) => !note.isTrash);
-
-      if (
-        tagsClicked.length > 0 &&
-        !(tagsClicked.length === 1 && tagsClicked[0] === 'All')
-      ) {
-        notes = notes.filter((note) =>
-          tagsClicked.every((selectedTag) =>
-            note.tags.some((noteTag) => noteTag.name === selectedTag)
-          )
-        );
-      }
     } else if (sideBarMenu[1].isSelected) {
       // "Favorites" selected
+
       notes = notes.filter((note) => !note.isTrash && note.isFavorite);
     } else if (sideBarMenu[2].isSelected) {
       // "Trash" selected
+
       notes = notes.filter((note) => note.isTrash);
     }
 
@@ -60,6 +51,18 @@ function AllNotesSection() {
     if (searchBarQuery.trim() !== '') {
       notes = notes.filter((note) =>
         note.title.toLowerCase().includes(searchBarQuery.toLowerCase())
+      );
+    }
+
+    //tags filter logic
+    if (
+      tagsClicked.length > 0 &&
+      !(tagsClicked.length === 1 && tagsClicked[0] === 'All')
+    ) {
+      notes = notes.filter((note) =>
+        tagsClicked.every((selectedTag) =>
+          note.tags.some((noteTag) => noteTag.name === selectedTag)
+        )
       );
     }
 
