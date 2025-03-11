@@ -1,36 +1,67 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Codebin
 
-## Getting Started
+**Codebin** is a powerful and intuitive code snippet management tool that helps developers store, organize, and edit code snippets in real-time. It provides a seamless experience for managing snippets with syntax highlighting, categorization, and a smart organization system. Future updates will include AI-powered snippet generation and error detection.
 
-First, run the development server:
+## Features
+
+- **Real-time Code Editing:** Modify and preview code snippets instantly.
+- **Smart Organization:** Categorize snippets with custom tags.
+- **Syntax Highlighting:** Supports multiple programming languages.
+- **User Authentication:** Secure access with Clerk authentication.
+- **Data Persistence:** Store snippets securely using MongoDB.
+- **Minimal & Intuitive UI:** Built with MUI for a sleek user experience.
+
+## Technologies Used
+
+- **Frontend:** Next.js, React, Tailwind CSS, MUI
+- **State Management:** Zustand
+- **Database:** MongoDB with Mongoose
+- **Authentication:** Clerk
+- **Code Editing:** Ace Editor, React-Code-Blocks
+- **Icons:** Lucide React, React Icons, Simple Icons
+- **Utilities:** Lodash, UUID
+- **Notifications:** React Hot Toast
+
+## Installation
+
+To run Codebin locally, follow these steps:
 
 ```bash
+# Clone the repository
+git clone https://github.com/Piyushverma-tech/codebin.git
+cd codebin
+
+# Install dependencies
+npm install
+
+# Create a .env file and add your environment variables
+
+# Start the development server
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Scripts
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+- `npm run dev` - Starts the development server with Turbopack.
+- `npm run build` - Builds the application for production.
+- `npm run start` - Runs the production build.
+- `npm run lint` - Runs ESLint to check for linting errors.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Future Enhancements
 
-## Learn More
+- AI-powered code snippet generation.
+- Automated error detection and suggestions.
+- Collaboration features for sharing snippets with teams.
+- Advanced search and filtering.
 
-To learn more about Next.js, take a look at the following resources:
+## License
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+This project is licensed under the MIT License.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+---
 
-## Deploy on Vercel
+**Contributions are welcome!** Feel free to fork, submit issues, or make pull requests to improve Codebin.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+Happy Coding! 🚀
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+
