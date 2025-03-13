@@ -95,7 +95,7 @@ export default function SwiperSelection() {
   return (
     <div
       className={`${
-        darkMode[1].isSelected ? 'bg-zinc-800/40  text-white' : 'bg-gray-50'
+        darkMode[1].isSelected ? 'bg-zinc-900  text-white' : 'bg-gray-50'
       } p-1 rounded-lg flex gap-2`}
     >
       {/* Container for scrollable tags */}

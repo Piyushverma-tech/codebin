@@ -142,7 +142,7 @@ function ContentNote() {
           : 'w-1/2'
       } ${
         darkMode[1].isSelected
-          ? 'bg-zinc-800/20 text-white'
+          ? 'bg-zinc-900 text-white'
           : 'bg-gray-50 text-slate-900'
       } p-3 rounded-lg  ${openContentNote ? 'block' : 'hidden'} h-[740px]`}
     >

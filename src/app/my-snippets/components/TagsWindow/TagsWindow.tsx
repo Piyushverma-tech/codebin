@@ -111,7 +111,7 @@ function TagsWindow() {
             ? 'fixed left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-full z-50'
             : 'w-[32%] '
         } ${
-          darkMode[1].isSelected ? 'bg-zinc-800/40' : 'bg-gray-50 '
+          darkMode[1].isSelected ? 'bg-zinc-900' : 'bg-gray-50 '
         } rounded-xl p-6 h-[580px] z-40`}
         role="dialog"
         aria-modal="true"

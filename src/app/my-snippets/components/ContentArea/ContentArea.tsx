@@ -36,7 +36,7 @@ function TopBar() {
   return (
     <div
       className={`rounded-xl flex justify-between items-center  p-3 ${
-        darkMode[1].isSelected ? 'bg-zinc-800/60' : 'bg-gray-50 shadow-md'
+        darkMode[1].isSelected ? 'bg-zinc-900' : 'bg-gray-50 shadow-md'
       }`}
     >
       <ProfileUser />
