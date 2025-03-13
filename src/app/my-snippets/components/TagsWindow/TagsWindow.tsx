@@ -111,7 +111,7 @@ function TagsWindow() {
             ? 'fixed left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-full z-50'
             : 'w-[32%] '
         } ${
-          darkMode[1].isSelected ? 'bg-neutral-950' : 'bg-gray-50 '
+          darkMode[1].isSelected ? 'bg-zinc-800/40' : 'bg-gray-50 '
         } rounded-xl p-6 h-[580px] z-40`}
         role="dialog"
         aria-modal="true"
@@ -201,14 +201,14 @@ function SearchBar({
           placeholder="Search tags..."
           className={`w-full h-9 pl-10 pr-4 rounded-lg ${
             darkMode[1].isSelected
-              ? 'bg-neutral-900 text-slate-300'
-              : 'bg-gray-50 border border-gray-200 text-slate-500'
-          }  text-sm  focus:outline-none focus:ring-2 focus:ring-violet-500 focus:border-transparent transition-all`}
+              ? ' text-slate-300'
+              : ' border border-gray-200 text-slate-500'
+          }  text-sm bg-transparent focus:outline-none focus:ring-2 focus:ring-violet-500 focus:border-transparent transition-all`}
         />
       </div>
       <button
         onClick={() => setOpenNewTagWindow(true)}
-        className=" p-2.5 bg-violet-600 hover:bg-violet-700 rounded-lg flex items-center text-white transition-colors"
+        className=" p-2.5 bg-violet-500 hover:bg-violet-700 rounded-lg flex items-center text-white transition-colors"
       >
         <Plus className="h-4 w-4" />
       </button>
@@ -252,7 +252,7 @@ function SingleTag({ tag }: { tag: SingleTagType }) {
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-4">
           <GripVertical className="h-5 w-5 text-gray-400 cursor-move opacity-0 group-hover:opacity-100 transition-opacity" />
-          <div className="h-2.5 w-2.5 rounded-full bg-violet-600" />
+          <div className="h-2.5 w-2.5 rounded-full bg-violet-500" />
           <div>
             <h3
               className={`font-medium text-[14px] ${

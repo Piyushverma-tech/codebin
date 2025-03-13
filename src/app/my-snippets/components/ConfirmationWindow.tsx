@@ -63,7 +63,7 @@ function ConfirmationWindow() {
       <div className="flex min-h-full items-center justify-center p-4">
         <div
           className={`relative transform overflow-hidden rounded-lg ${
-            darkMode[1].isSelected ? 'bg-neutral-950' : 'bg-gray-50'
+            darkMode[1].isSelected ? 'bg-zinc-900' : 'bg-gray-50'
           } px-4 pb-4 pt-5 text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-lg sm:p-6`}
         >
           {/* Content */}
@@ -107,7 +107,7 @@ function ConfirmationWindow() {
             <button
               type="button"
               onClick={() => deleteSnippet()}
-              className="inline-flex w-full justify-center rounded-md border border-transparent bg-violet-600 px-4 py-2 text-base font-medium text-white shadow-sm hover:bg-violet-700 focus:outline-none focus:ring-2 focus:ring-violet-500 focus:ring-offset-2 sm:w-auto sm:text-sm"
+              className="inline-flex w-full justify-center rounded-md border border-transparent bg-violet-500 px-4 py-2 text-base font-medium text-white shadow-sm hover:bg-violet-700 focus:outline-none focus:ring-2 focus:ring-violet-500 focus:ring-offset-2 sm:w-auto sm:text-sm"
             >
               {isDeleting ? 'Deleting...' : 'Delete'}
             </button>
@@ -115,10 +115,8 @@ function ConfirmationWindow() {
               type="button"
               onClick={() => setOpenConfirmationWindow(false)}
               className={`mt-3 inline-flex w-full justify-center rounded-md border border-gray-300 ${
-                darkMode[1].isSelected
-                  ? 'bg-neutral-950 text-gray-200'
-                  : 'bg-white text-gray-700'
-              }  px-4 py-2 text-base font-medium  shadow-sm focus:outline-none  sm:mt-0 sm:w-auto sm:text-sm`}
+                darkMode[1].isSelected ? ' text-gray-200' : ' text-gray-700'
+              }  px-4 py-2 text-base bg-transparent font-medium  shadow-sm focus:outline-none  sm:mt-0 sm:w-auto sm:text-sm`}
             >
               Cancel
             </button>

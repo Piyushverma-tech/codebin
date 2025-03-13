@@ -35,7 +35,7 @@ const Buttons = () => {
   if (userId) {
     return (
       <Link href="/my-snippets" className="w-full sm:w-auto">
-        <button className="w-full sm:w-auto bg-violet-600 hover:bg-violet-700 px-6 py-2 rounded-lg text-white font-medium transition-colors">
+        <button className="w-full sm:w-auto bg-violet-500 hover:bg-violet-600 px-6 py-2 rounded-lg text-white font-medium transition-colors">
           Access The App
         </button>
       </Link>
@@ -45,12 +45,12 @@ const Buttons = () => {
   return (
     <div className="flex flex-col sm:flex-row gap-4 w-full sm:w-auto">
       <Link href="/sign-in" className="w-full sm:w-auto">
-        <button className="w-full bg-violet-600 hover:bg-violet-700 px-6 py-2 rounded-lg text-white font-medium transition-colors">
+        <button className="w-full bg-violet-500 hover:bg-violet-600 px-6 py-2 rounded-lg text-white font-medium transition-colors">
           Sign In
         </button>
       </Link>
       <Link href="/sign-up" className="w-full sm:w-auto">
-        <button className="w-full border-2 border-violet-600 hover:bg-violet-600 hover:text-white px-6 py-2 rounded-lg text-violet-600 font-medium transition-colors">
+        <button className="w-full border-2 border-violet-600 hover:bg-violet-500 hover:text-white px-6 py-2 rounded-lg text-violet-600 font-medium transition-colors">
           Sign Up
         </button>
       </Link>
@@ -72,7 +72,7 @@ const Hero = () => {
           Codebin makes code management effortless.
         </p>
         <Link href="/sign-up" className="block px-4">
-          <button className="w-full sm:w-auto bg-violet-600 hover:bg-violet-700 px-8 py-3 rounded-full text-white font-medium text-lg transition-colors">
+          <button className="w-full sm:w-auto bg-violet-500 hover:bg-violet-600 px-8 py-3 rounded-full text-white font-medium text-lg transition-colors">
             Start Organizing Today
           </button>
         </Link>
@@ -117,7 +117,7 @@ const Features = () => {
               key={index}
               className="p-6 rounded-xl bg-[#ededed] hover:shadow-lg text-center transition-shadow"
             >
-              <div className="w-12 h-12 bg-violet-600 rounded-lg flex mx-auto items-center justify-center text-white mb-4">
+              <div className="w-12 h-12 bg-violet-500 rounded-lg flex mx-auto items-center justify-center text-white mb-4">
                 {feature.icon}
               </div>
               <h3 className="text-lg font-semibold mb-2">{feature.title}</h3>

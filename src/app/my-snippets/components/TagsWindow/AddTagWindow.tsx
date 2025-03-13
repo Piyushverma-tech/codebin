@@ -102,7 +102,7 @@ function AddTagWindow() {
       {/* Modal */}
       <div
         className={`fixed left-1/2 top-1/3 -translate-x-1/2 -translate-y-1/2 w-full max-w-md ${
-          darkMode[1].isSelected ? 'bg-neutral-950' : ' bg-gray-50'
+          darkMode[1].isSelected ? 'bg-zinc-900 ' : ' bg-gray-50'
         } rounded-xl shadow-xl p-6 z-50`}
         role="dialog"
         aria-modal="true"
@@ -173,7 +173,7 @@ function AddTagWindow() {
           </button>
           <button
             onClick={handleClickedTag}
-            className="px-4 py-2 bg-violet-600 hover:bg-violet-700 rounded-lg text-sm font-medium text-white transition-colors"
+            className="px-4 py-2 bg-violet-500 hover:bg-violet-700 rounded-lg text-sm font-medium text-white transition-colors"
           >
             {selectedTagEdit ? 'Edit Tag' : 'Add Tag'}
           </button>

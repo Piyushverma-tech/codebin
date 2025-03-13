@@ -142,7 +142,7 @@ function ContentNote() {
           : 'w-1/2'
       } ${
         darkMode[1].isSelected
-          ? 'bg-neutral-950 text-white'
+          ? 'bg-zinc-800/20 text-white'
           : 'bg-gray-50 text-slate-900'
       } p-3 rounded-lg  ${openContentNote ? 'block' : 'hidden'} h-[740px]`}
     >
@@ -242,7 +242,7 @@ function ContentNoteHeader({
           onMouseLeave={() => setOnFocus(false)}
           className={`${
             darkMode[1].isSelected
-              ? ' bg-neutral-950 text-violet-200'
+              ? ' bg-transparent text-violet-200'
               : ' bg-gray-50 text-slate-500 '
           } font-bold text-[24px] sm:text-center sm:ml-4 outline-none  h-18 overflow-y-auto resize-none  overflow-hidden w-full`}
         />
@@ -490,10 +490,8 @@ function Description({
         onChange={onUpdateDescription}
         value={singleNote.description || ''}
         placeholder="Add a description..."
-        className={`${
-          darkMode[1].isSelected
-            ? 'bg-neutral-950 text-slate-200'
-            : 'bg-gray-50 text-slate-800'
+        className={`bg-transparent ${
+          darkMode[1].isSelected ? ' text-slate-200' : ' text-slate-800'
         } text-sm  outline-none border w-full   ${
           isHoverd ? 'border-violet-600' : 'border-slate-400'
         } rounded-lg p-2 h-20 resize-none`}
@@ -633,9 +631,7 @@ function CodeBlock({
           placeholder="// Add your code here..."
           mode="javascript"
           theme="tomorrow"
-          className={`${
-            darkMode[1].isSelected ? 'bg-neutral-950' : 'bg-gray-50'
-          } p-4 mt-2`}
+          className={`bg-transparent p-4 mt-2`}
           name="blah2"
           width="100%"
           height="300px"

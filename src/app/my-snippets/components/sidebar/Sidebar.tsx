@@ -28,7 +28,7 @@ export default function Sidebar() {
         ${openSideBar ? 'translate-x-0' : '-translate-x-full'} 
         md:translate-x-0 transition-all duration-300 ease-in-out
         w-[280px] md:w-[300px] lg:w-[20%] p-6 flex flex-col gap-2 border-r z-40
-        backdrop-blur-xl bg-opacity-95
+        backdrop-blur-xl 
         ${
           darkMode[1].isSelected
             ? 'bg-neutral-950 border-zinc-800 shadow-2xl shadow-violet-500/5'
@@ -129,7 +129,7 @@ function QuickLinks() {
             transition-all duration-200
             ${
               menu.isSelected
-                ? 'bg-violet-600 text-white  shadow-lg shadow-violet-500/30'
+                ? 'bg-violet-500 text-white  shadow-lg shadow-violet-500/30'
                 : `text-slate-500 hover:bg-slate-100 
                    ${
                      darkMode[1].isSelected
@@ -154,7 +154,7 @@ function QuickLinks() {
           transition-all duration-200
           ${
             menu.isSelected
-              ? 'bg-violet-600 text-white  shadow-lg shadow-violet-500/30'
+              ? 'bg-violet-500 text-white  shadow-lg shadow-violet-500/30'
               : `text-slate-500 hover:bg-slate-100 
                  ${
                    darkMode[1].isSelected

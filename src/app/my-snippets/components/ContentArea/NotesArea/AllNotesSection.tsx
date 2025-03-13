@@ -224,7 +224,7 @@ function SingleNote({ note, id }: { note: SingleNoteType; id: string }) {
   return (
     <div
       className={`${
-        darkMode[1].isSelected ? 'bg-neutral-950 text-white' : 'bg-gray-50'
+        darkMode[1].isSelected ? ' bg-zinc-800/20 text-white' : 'bg-gray-50'
       } ${
         openContentNote ? 'w-[375px] sm:w-[585px]' : 'w-[375px]'
       } rounded-lg  h-[400px]`}
@@ -482,7 +482,7 @@ function NoteFooter({
             Note has been moved to trash
           </span>
           <button
-            className="bg-violet-600 p-[4px] px-3 text-sm text-white rounded-md flex gap-1 items-center"
+            className="bg-violet-500 p-[4px] px-3 text-sm text-white rounded-md flex gap-1 items-center"
             onClick={() => {
               toast.dismiss(t.id);
               resetNoteFunction();

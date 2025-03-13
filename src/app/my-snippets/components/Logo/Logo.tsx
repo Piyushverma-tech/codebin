@@ -1,12 +1,13 @@
-import { Box } from 'lucide-react';
+import Image from 'next/image';
 
 export const Logo = () => {
   return (
     <div className="flex items-center gap-2">
-      <div className="bg-violet-600 p-2 rounded-lg">
-        <Box className="w-6 h-6 text-white" />
+      <div className="flex items-center">
+        <Image src="/Codebin-logo.png" alt="logo" width={45} height={45} />
       </div>
-      <span className="text-xl font-bold text-violet-600">Codebin</span>
+
+      <span className="text-xl font-bold text-violet-500">Codebin</span>
     </div>
   );
 };

@@ -17,9 +17,7 @@ function ContentArea() {
   return (
     <div
       className={`sm:w-[80%] w-full h-auto min-h-screen pb-6 overflow-hidden  sm:p-4 ${
-        darkMode[1].isSelected
-          ? ' bg-neutral-950 sm:bg-neutral-800'
-          : 'bg-white/40'
+        darkMode[1].isSelected ? ' bg-neutral-950 ' : 'bg-white/40'
       }`}
     >
       <TopBar />
@@ -38,7 +36,7 @@ function TopBar() {
   return (
     <div
       className={`rounded-xl flex justify-between items-center  p-3 ${
-        darkMode[1].isSelected ? 'bg-neutral-950' : 'bg-gray-50 shadow-md'
+        darkMode[1].isSelected ? 'bg-zinc-800/60' : 'bg-gray-50 shadow-md'
       }`}
     >
       <ProfileUser />
