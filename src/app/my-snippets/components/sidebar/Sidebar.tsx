@@ -46,7 +46,7 @@ export default function Sidebar() {
         </div>
 
         {/* Logo Container */}
-        <div className="flex items-center justify-center md:justify-start px-2 py-4 mb-6">
+        <div className="flex items-center justify-center pr-2 mt-4 mb-8">
           <Logo />
         </div>
 

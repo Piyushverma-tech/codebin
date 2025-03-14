@@ -327,8 +327,8 @@ function NoteHeader({
     <div className="flex justify-between">
       <span
         className={`text-slate-600 font-bold text-lg  ${
-          !isTrashed && 'hover:text-violet-600 cursor-pointer'
-        } truncate ${darkMode[1].isSelected ? 'text-violet-200' : ''}`}
+          !isTrashed && 'hover:text-violet-500 cursor-pointer'
+        } truncate ${darkMode[1].isSelected ? 'text-neutral-300' : ''}`}
         onClick={() => clickedNoteTitle()}
       >
         {truncateString(title, 40)}
@@ -339,7 +339,7 @@ function NoteHeader({
             <Favorite className="text-slate-400 cursor-pointer flex-shrink-0" />
           }
           checkedIcon={
-            <Favorite className="text-violet-600 cursor-pointer flex-shrink-0" />
+            <Favorite className="text-violet-500 cursor-pointer flex-shrink-0" />
           }
           checked={isFavorite}
           onClick={handleClickedCheckbox}
@@ -355,7 +355,7 @@ function NoteTags({ tags }: { tags: SingleTagType[] }) {
       {tags.map((tag, index) => (
         <span
           key={tag._id || index || tag.name}
-          className="bg-violet-100 text-violet-600 p-1 rounded-md px-2"
+          className="bg-gray-200 text-violet-600 p-1 rounded-md px-2"
         >
           {tag.name}
         </span>
@@ -546,8 +546,8 @@ function NoteFooter({
           sx={{ fontSize: 18 }}
           onClick={trashNoteFunction}
           className={`${
-            note.isTrash && 'text-violet-600'
-          } cursor-pointer hover:text-violet-600 flex-shrink-0`}
+            note.isTrash && 'text-violet-500'
+          } cursor-pointer hover:text-violet-500 flex-shrink-0`}
         />
       </div>
     </div>

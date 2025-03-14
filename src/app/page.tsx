@@ -62,7 +62,7 @@ const Hero = () => {
   return (
     <div className="text-center px-4 sm:px-6 pt-16 sm:pt-24 pb-16">
       <div className="max-w-3xl mx-auto space-y-6">
-        <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold text-gray-900 px-4">
+        <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold text-gray-800 px-4">
           Your Personal Library for
           <span className="text-violet-600 block mt-2">Code Snippets</span>
         </h1>

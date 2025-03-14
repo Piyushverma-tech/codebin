@@ -198,7 +198,7 @@ function ContentNoteHeader({
       return;
     }
 
-    // ✅ Call saveNoteInDB immediately after updating state
+    //Calling saveNoteInDB immediately after updating state
     saveNoteInDB(
       newSingleNote,
       false,
@@ -242,7 +242,7 @@ function ContentNoteHeader({
           onMouseLeave={() => setOnFocus(false)}
           className={`${
             darkMode[1].isSelected
-              ? ' bg-transparent text-violet-200'
+              ? ' bg-transparent text-neutral-300'
               : ' bg-gray-50 text-slate-500 '
           } font-bold text-[24px] sm:text-center sm:ml-4 outline-none  h-18 overflow-y-auto resize-none  overflow-hidden w-full`}
         />
@@ -321,7 +321,7 @@ function NoteTags({
       {!isMobile && (
         <TagsIcon
           size={26}
-          className={`${hovered ? 'text-violet-600' : 'text-slate-400'}`}
+          className={`${hovered ? 'text-violet-500' : 'text-slate-400'}`}
         />
       )}
       <div
@@ -336,7 +336,7 @@ function NoteTags({
             singleNote.tags.map((tag, index) => (
               <div
                 key={tag._id || tag.name || index}
-                className=" border-2 bg-violet-100 text-violet-600 shadow-sm  p-1 px-2 rounded-md "
+                className=" border-2 bg-gray-200 text-violet-600 shadow-sm  p-1 px-2 rounded-md "
               >
                 {tag.name}
               </div>
@@ -477,7 +477,7 @@ function Description({
         <DescriptionOutlined
           sx={{ fontSize: 24 }}
           className={`mt-[9px] ${
-            isHoverd ? 'text-violet-600' : 'text-slate-400'
+            isHoverd ? 'text-violet-500' : 'text-slate-400'
           }`}
         />
       )}
@@ -493,7 +493,7 @@ function Description({
         className={`bg-transparent ${
           darkMode[1].isSelected ? ' text-slate-200' : ' text-slate-800'
         } text-sm  outline-none border w-full   ${
-          isHoverd ? 'border-violet-600' : 'border-slate-400'
+          isHoverd ? 'border-violet-500' : 'border-slate-400'
         } rounded-lg p-2 h-20 resize-none`}
       />
     </div>
@@ -572,7 +572,7 @@ function CodeBlock({
         <CodeOutlined
           sx={{ fontSize: 22 }}
           className={`mt-[9px] ${
-            isHoverd ? 'text-violet-600' : 'text-slate-400'
+            isHoverd ? 'text-violet-500' : 'text-slate-400'
           }`}
         />
       )}
@@ -580,7 +580,7 @@ function CodeBlock({
         onMouseEnter={() => setIsHoverd(true)}
         onMouseLeave={() => setIsHoverd(false)}
         className={`${
-          isHoverd ? 'border-violet-600' : 'border-slate-400'
+          isHoverd ? 'border-violet-500' : 'border-slate-400'
         } border rounded-lg p-3 pt-16 w-full relative 
         }`}
       >
