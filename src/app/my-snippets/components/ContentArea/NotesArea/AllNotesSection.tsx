@@ -326,9 +326,11 @@ function NoteHeader({
   return (
     <div className="flex justify-between">
       <span
-        className={`text-slate-600 font-bold text-lg  ${
+        className={`font-bold text-lg  ${
           !isTrashed && 'hover:text-violet-500 cursor-pointer'
-        } truncate ${darkMode[1].isSelected ? 'text-neutral-300' : ''}`}
+        } truncate ${
+          darkMode[1].isSelected ? 'text-neutral-300' : 'text-slate-600 '
+        }`}
         onClick={() => clickedNoteTitle()}
       >
         {truncateString(title, 40)}
