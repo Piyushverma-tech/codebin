@@ -423,7 +423,7 @@ const NoteCodeBlock: React.FC<NoteCodeBlockProps> = ({ language, code }) => {
       <div className="h-full overflow-y-auto ">
         <DynamicCodeBlock
           text={code || '// Add your code here...'}
-          language={language}
+          language={language.toLowerCase()}
           showLineNumbers={false}
           theme={darkMode[1].isSelected ? dracula : atomOneLight}
           customStyle={{
