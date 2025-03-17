@@ -1,5 +1,5 @@
 import { useGlobalContext } from '@/ContextApi';
-import { atomOneLight, dracula } from 'react-code-blocks';
+import { anOldHope, tomorrow } from 'react-code-blocks';
 import {
   DeleteOutline,
   DeleteRounded,
@@ -357,7 +357,7 @@ function NoteTags({ tags }: { tags: SingleTagType[] }) {
       {tags.map((tag, index) => (
         <span
           key={tag._id || index || tag.name}
-          className="bg-gray-200 text-violet-600 p-1 rounded-md px-2"
+          className="bg-violet-100 text-violet-600 p-1 rounded-md px-2"
         >
           {tag.name}
         </span>
@@ -425,7 +425,7 @@ const NoteCodeBlock: React.FC<NoteCodeBlockProps> = ({ language, code }) => {
           text={code || '// Add your code here...'}
           language={language.toLowerCase()}
           showLineNumbers={false}
-          theme={darkMode[1].isSelected ? dracula : atomOneLight}
+          theme={darkMode[1].isSelected ? anOldHope : tomorrow}
           customStyle={{
             height: '100%',
             overflowY: 'auto',
