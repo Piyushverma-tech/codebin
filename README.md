@@ -2,7 +2,7 @@
 
 <div align="center">
 
-![CodeBin Logo](public/Codebin-logo.png)
+<img src="public/Codebin-logo.png" alt="CodeBin Logo" width="200" />
 
 [![Next.js](https://img.shields.io/badge/Next.js-14-black)](https://nextjs.org/)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5-blue)](https://www.typescriptlang.org/)
@@ -11,7 +11,7 @@
 
 **Your AI-Powered Code Snippet Management Solution**
 
-[Demo](https://codebin.vercel.app) · [Documentation](docs/README.md) · [Report Bug](issues) · [Request Feature](issues)
+[Demo](https://codebin-alpha.vercel.app/) · [Documentation](docs/README.md) · [Report Bug](issues) · [Request Feature](issues)
 
 </div>
 
