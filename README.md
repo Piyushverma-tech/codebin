@@ -2,7 +2,7 @@
 
 <div align="center">
 
-![CodeBin Logo](public/logo.png)
+![CodeBin Logo](public/Codebin-logo.png)
 
 [![Next.js](https://img.shields.io/badge/Next.js-14-black)](https://nextjs.org/)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5-blue)](https://www.typescriptlang.org/)
@@ -191,7 +191,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ## 📞 Contact
 
-Project Link: [https://github.com/yourusername/codebin](https://github.com/yourusername/codebin)
+Project Link: [https://github.com/Piyushverma-tech/codebin](https://github.com/Piyushverma-tech/codebin)
 
 ---
 
