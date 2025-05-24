@@ -11,20 +11,33 @@ import {
   ContentCopyOutlined,
   DescriptionOutlined,
   DoneAllOutlined,
+  AutoFixHighOutlined,
+  EditOutlined,
+  BuildOutlined,
 } from '@mui/icons-material';
 import CloseOutlined from '@mui/icons-material/CloseOutlined';
-import EditOutlined from '@mui/icons-material/EditOutlined';
 import { IconButton } from '@mui/material';
 import React, { useEffect, useMemo, useRef, useState } from 'react';
+import { toast } from 'react-hot-toast';
 
 import AceEditor from 'react-ace';
 
-// Import a mode and a theme
+// Import all Ace builds
+import 'ace-builds/src-noconflict/ace';
 import 'ace-builds/src-noconflict/mode-javascript';
+import 'ace-builds/src-noconflict/mode-python';
+import 'ace-builds/src-noconflict/mode-java';
+import 'ace-builds/src-noconflict/mode-typescript';
+import 'ace-builds/src-noconflict/mode-html';
+import 'ace-builds/src-noconflict/mode-css';
 import 'ace-builds/src-noconflict/theme-tomorrow';
+import 'ace-builds/src-noconflict/theme-monokai';
+import 'ace-builds/src-noconflict/ext-language_tools';
 import { SearchIcon, TagsIcon } from 'lucide-react';
 import programmingLanguages from '@/app/localData/Languages';
 import { debounce } from 'lodash';
+import AICodeGenerator from '../AICodeGenerator/AICodeGenerator';
+import ModifyCodeModal from '../ModifyCodeModal/ModifyCodeModal';
 
 export async function saveNoteInDB(
   note: SingleNoteType,
@@ -35,29 +48,43 @@ export async function saveNoteInDB(
   >,
   setIsNewNote: React.Dispatch<React.SetStateAction<boolean>>
 ) {
-  // If note._id is falsy, then its new, otherwise its an update.
-  const reallyNew = !note._id || isNew;
-
-  const url = reallyNew
-    ? '/api/snippets'
-    : `/api/snippets?snippetId=${note._id}`;
-  const method = reallyNew ? 'POST' : 'PUT';
-
-  // Remove _id from the payload when creating a new note
-  const { _id, ...noteData } = note;
-  if (_id) {
-  }
-
-  const bodyData = {
-    ...noteData,
-    description: noteData.description || '',
-    code: noteData.code || '',
-    language: noteData.language || 'Javascript',
-  };
-
-  const body = JSON.stringify(bodyData);
-
   try {
+    // If note._id is falsy, then its new, otherwise its an update.
+    const reallyNew = !note._id || isNew;
+
+    const url = reallyNew
+      ? '/api/snippets'
+      : `/api/snippets?snippetId=${note._id}`;
+    const method = reallyNew ? 'POST' : 'PUT';
+
+    // Remove _id from the payload when creating a new note
+    const { _id, ...noteData } = note;
+
+    if (_id) {
+      //
+    }
+
+    // Ensure all required fields are present
+    const bodyData = {
+      ...noteData,
+      title: noteData.title || '',
+      description: noteData.description || '',
+      code: noteData.code || '',
+      language: noteData.language || 'Javascript',
+      clerkUserId: noteData.clerkUserId,
+      tags: noteData.tags || [],
+      isFavorite: noteData.isFavorite || false,
+      isTrash: noteData.isTrash || false,
+      creationDate: noteData.creationDate || new Date().toISOString(),
+    };
+
+    // Validate required fields
+    if (!bodyData.clerkUserId) {
+      throw new Error('User ID is required');
+    }
+
+    const body = JSON.stringify(bodyData);
+
     const response = await fetch(url, {
       method,
       headers: {
@@ -67,7 +94,10 @@ export async function saveNoteInDB(
     });
 
     if (!response.ok) {
-      throw new Error(`Failed to save note: ${response.statusText}`);
+      const errorData = await response.json();
+      throw new Error(
+        errorData.error || `Failed to save note: ${response.statusText}`
+      );
     }
 
     const data = await response.json();
@@ -94,6 +124,7 @@ export async function saveNoteInDB(
     }
   } catch (error) {
     console.error('Error saving note:', error);
+    throw error; // Re-throw the error to be handled by the caller
   }
 }
 
@@ -110,6 +141,7 @@ function ContentNote() {
   const [singleNote, setSingleNote] = useState<SingleNoteType | undefined>(
     undefined
   );
+  const [saveError, setSaveError] = useState<string | null>(null);
 
   useEffect(() => {
     if (openContentNote && selectedNote) {
@@ -117,20 +149,31 @@ function ContentNote() {
     }
   }, [openContentNote, selectedNote]);
 
-  //check this
   useEffect(() => {
     if (isNewNote && singleNote && singleNote.title.trim() !== '') {
       debouncedSavedNote(singleNote, isNewNote);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [singleNote]);
 
   const debouncedSavedNote = useMemo(
     () =>
-      debounce((note: SingleNoteType, isNew: boolean) => {
-        saveNoteInDB(note, isNew, setAllNotes, setSingleNote, setIsNewNote);
+      debounce(async (note: SingleNoteType, isNew: boolean) => {
+        try {
+          await saveNoteInDB(
+            note,
+            isNew,
+            setAllNotes,
+            setSingleNote,
+            setIsNewNote
+          );
+          setSaveError(null);
+        } catch (error) {
+          console.error('Error in debounced save:', error);
+          setSaveError(
+            error instanceof Error ? error.message : 'Failed to save note'
+          );
+        }
       }, 500),
-    // eslint-disable-next-line react-hooks/exhaustive-deps
     []
   );
 
@@ -148,6 +191,11 @@ function ContentNote() {
     >
       {singleNote && (
         <div>
+          {saveError && (
+            <div className="mb-4 p-2 bg-red-100 border border-red-400 text-red-700 rounded">
+              {saveError}
+            </div>
+          )}
           <ContentNoteHeader
             singleNote={singleNote}
             setSingleNote={setSingleNote}
@@ -512,6 +560,9 @@ function CodeBlock({
   const [isHoverd, setIsHoverd] = useState(false);
   const [isOpened, setIsOpened] = useState(false);
   const [isCopied, setIsCopied] = useState(false);
+  const [isAIModalOpen, setIsAIModalOpen] = useState(false);
+  const [isModifyModalOpen, setIsModifyModalOpen] = useState(false);
+  const [isConverting, setIsConverting] = useState(false);
 
   const {
     selectedLanguageObject: { selectedLanguage, setSelectedLanguage },
@@ -566,6 +617,89 @@ function CodeBlock({
     }, 1200);
   }
 
+  const handleAIGenerated = async (generatedNote: Partial<SingleNoteType>) => {
+    try {
+      const newNote: SingleNoteType = {
+        _id: '', // This will be assigned by MongoDB
+        clerkUserId: generatedNote.clerkUserId || singleNote.clerkUserId,
+        title: generatedNote.title || '',
+        description: generatedNote.description || '',
+        code: generatedNote.code || '',
+        language: generatedNote.language || 'Javascript',
+        creationDate: new Date().toISOString(),
+        tags: [],
+        isFavorite: false,
+        isTrash: false,
+      };
+
+      // Save as a new note
+      await saveNoteInDB(
+        newNote,
+        true, // isNew flag set to true
+        setAllNotes,
+        setSingleNote,
+        setIsNewNote
+      );
+    } catch (error) {
+      console.error('Error saving generated code:', error);
+      toast.error('Failed to save generated code. Please try again.');
+    }
+  };
+
+  async function convertCodeToLanguage(newLanguage: string) {
+    if (!singleNote.code.trim()) return; // Don't convert empty code
+
+    setIsConverting(true);
+    try {
+      const response = await fetch('/api/generate-code', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          prompt: `Convert this ${singleNote.language} code to ${newLanguage}:\n\n${singleNote.code}`,
+          language: newLanguage,
+        }),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok || data.error) {
+        throw new Error(data.error || 'Failed to convert code');
+      }
+
+      // Update the note with the converted code
+      const updatedNote = {
+        ...singleNote,
+        code: data.code,
+        language: newLanguage,
+      };
+
+      setSingleNote(updatedNote);
+      setAllNotes((prevNotes) =>
+        prevNotes.map((note) =>
+          note._id === singleNote._id ? updatedNote : note
+        )
+      );
+
+      // Save the updated note
+      await saveNoteInDB(
+        updatedNote,
+        false,
+        setAllNotes,
+        setSingleNote,
+        setIsNewNote
+      );
+
+      toast.success(`Code converted to ${newLanguage}`);
+    } catch (error) {
+      console.error('Error converting code:', error);
+      toast.error('Failed to convert code. Please try again.');
+    } finally {
+      setIsConverting(false);
+    }
+  }
+
   return (
     <div className="flex gap-2 text-[12px] p-2 text-slate-400 mt-4">
       {!isMobile && (
@@ -581,10 +715,28 @@ function CodeBlock({
         onMouseLeave={() => setIsHoverd(false)}
         className={`${
           isHoverd ? 'border-violet-500' : 'border-slate-400'
-        } border rounded-lg p-3 pt-16 w-full relative 
-        }`}
+        } border rounded-lg p-3 pt-16 w-full relative`}
       >
-        <div className={`absolute top-4 right-4 z-50`}>
+        <div className={`absolute top-4 right-4 z-50 flex gap-2`}>
+          {!singleNote.code.trim() && (
+            <IconButton
+              onClick={() => setIsAIModalOpen(true)}
+              title="Generate new code"
+            >
+              <AutoFixHighOutlined
+                sx={{ fontSize: 25 }}
+                className="text-slate-400"
+              />
+            </IconButton>
+          )}
+          {singleNote.code.trim() && (
+            <IconButton
+              onClick={() => setIsModifyModalOpen(true)}
+              title="Modify existing code"
+            >
+              <BuildOutlined sx={{ fontSize: 22 }} className="text-slate-400" />
+            </IconButton>
+          )}
           <IconButton disabled={isCopied}>
             {isCopied ? (
               <DoneAllOutlined
@@ -604,7 +756,7 @@ function CodeBlock({
         {/* Language drop down */}
         <div
           onClick={() => setIsOpened(!isOpened)}
-          className={`flex gap-2 justify-between border border-slate-400 py-2  px-3 rounded-md items-center text-[12px] mt-3 absolute top-1 left-3 cursor-pointer`}
+          className={`flex gap-2 justify-between border border-slate-400 py-2 px-3 rounded-md items-center text-[12px] mt-3 absolute top-1 left-3 cursor-pointer`}
         >
           <div
             className={`${
@@ -627,6 +779,7 @@ function CodeBlock({
           )}
         </div>
         {isOpened && <LanguageMenu />}
+
         <AceEditor
           placeholder="// Add your code here..."
           mode="javascript"
@@ -650,6 +803,21 @@ function CodeBlock({
             showLineNumbers: false,
             tabSize: 2,
           }}
+        />
+
+        <AICodeGenerator
+          isOpen={isAIModalOpen}
+          onClose={() => setIsAIModalOpen(false)}
+          onCodeGenerated={handleAIGenerated}
+          selectedLanguage={selectedLanguage?.name || 'JavaScript'}
+        />
+
+        <ModifyCodeModal
+          isOpen={isModifyModalOpen}
+          onClose={() => setIsModifyModalOpen(false)}
+          currentCode={singleNote.code}
+          language={selectedLanguage?.name || 'JavaScript'}
+          onCodeModified={handleChange}
         />
       </div>
     </div>
@@ -692,29 +860,55 @@ function CodeBlock({
       };
     }, []);
 
-    function clickedLanguage(language: SingleCodeLanguageType) {
+    async function clickedLanguage(language: SingleCodeLanguageType) {
       if (singleNote.language === '') {
         setSelectedLanguage(programmingLanguages[0]);
         return;
       }
-      setSelectedLanguage(language);
-      setIsOpened(false);
 
-      if (singleNote) {
-        const newLanguage = language.name;
+      // If the language is different and there's code, offer to convert
+      if (
+        language.name.toLowerCase() !== singleNote.language.toLowerCase() &&
+        singleNote.code.trim()
+      ) {
+        const shouldConvert = window.confirm(
+          `Would you like to convert the existing code to ${language.name}?`
+        );
+
+        if (shouldConvert) {
+          await convertCodeToLanguage(language.name);
+        } else {
+          // Just update the language without converting code
+          const newSingleNote: SingleNoteType = {
+            ...singleNote,
+            language: language.name,
+          };
+          setSingleNote(newSingleNote);
+          setAllNotes((prevNotes) =>
+            prevNotes.map((note) =>
+              note._id === singleNote._id ? newSingleNote : note
+            )
+          );
+          saveNoteInDB(
+            newSingleNote,
+            false,
+            setAllNotes,
+            setSingleNote,
+            setIsNewNote
+          );
+        }
+      } else {
+        // Just update the language without converting code
         const newSingleNote: SingleNoteType = {
           ...singleNote,
-          language: newLanguage || 'Javascript',
+          language: language.name,
         };
-
         setSingleNote(newSingleNote);
-
         setAllNotes((prevNotes) =>
           prevNotes.map((note) =>
             note._id === singleNote._id ? newSingleNote : note
           )
         );
-
         saveNoteInDB(
           newSingleNote,
           false,
@@ -723,6 +917,9 @@ function CodeBlock({
           setIsNewNote
         );
       }
+
+      setSelectedLanguage(language);
+      setIsOpened(false);
     }
 
     return (
@@ -732,7 +929,7 @@ function CodeBlock({
           darkMode[1].isSelected
             ? 'bg-neutral-900'
             : 'bg-violet-100  text-slate-400'
-        } absolute flex-col gap-2 p-3 w-[200px] rounded-md left-3 border   shadow-lg z-50 flex `}
+        } absolute flex-col gap-2 p-3 w-[200px] rounded-md left-3 border shadow-lg z-50 flex`}
       >
         <div className={`p-1 rounded-md flex gap-1 mb-1`}>
           <SearchIcon />
@@ -750,29 +947,35 @@ function CodeBlock({
             darkMode[1].isSelected ? 'bg-neutral-900' : 'bg-violet-100'
           }  h-40  overflow-x-auto`}
         >
-          {filteredLanguages.map((language) => (
-            <div
-              onClick={() => clickedLanguage(language)}
-              key={language.id}
-              className={`${
-                darkMode[1].isSelected
-                  ? 'hover:bg-neutral-700 text-slate-300'
-                  : 'hover:bg-slate-300 text-slate-500'
-              }  flex mb-2 gap-2  bg-transparent p-[6px] px-3 rounded-md items-center cursor-pointer ${
-                selectedLanguage?.name.toLocaleLowerCase() ===
-                language.name.toLocaleLowerCase()
-                  ? `${
-                      darkMode[1].isSelected
-                        ? 'bg-neutral-700'
-                        : 'bg-violet-200'
-                    }`
-                  : ''
-              }`}
-            >
-              {language.icon}
-              <span className="mt-[1px]">{language.name}</span>
+          {isConverting ? (
+            <div className="flex items-center justify-center h-full">
+              <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-violet-500"></div>
             </div>
-          ))}
+          ) : (
+            filteredLanguages.map((language) => (
+              <div
+                onClick={() => clickedLanguage(language)}
+                key={language.id}
+                className={`${
+                  darkMode[1].isSelected
+                    ? 'hover:bg-neutral-700 text-slate-300'
+                    : 'hover:bg-slate-300 text-slate-500'
+                }  flex mb-2 gap-2  bg-transparent p-[6px] px-3 rounded-md items-center cursor-pointer ${
+                  selectedLanguage?.name.toLocaleLowerCase() ===
+                  language.name.toLocaleLowerCase()
+                    ? `${
+                        darkMode[1].isSelected
+                          ? 'bg-neutral-700'
+                          : 'bg-violet-200'
+                      }`
+                    : ''
+                }`}
+              >
+                {language.icon}
+                <span className="mt-[1px]">{language.name}</span>
+              </div>
+            ))
+          )}
         </div>
       </div>
     );

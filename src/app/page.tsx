@@ -1,13 +1,21 @@
 'use client';
 import React from 'react';
 import { useAuth } from '@clerk/nextjs';
-import { Star, Hash, Clock, Globe } from 'lucide-react';
+import {
+  Star,
+  Hash,
+  Clock,
+  Globe,
+  Sparkles,
+  Zap,
+  RefreshCw,
+} from 'lucide-react';
 import Link from 'next/link';
 import { Logo } from './my-snippets/components/Logo/Logo';
 
 const Home = () => {
   return (
-    <div className="min-h-screen bg-[#ededed] poppins">
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-blue-50">
       <Navbar />
       <Hero />
       <Features />
@@ -20,8 +28,8 @@ export default Home;
 
 const Navbar = () => {
   return (
-    <nav className="px-4 py-4 md:px-12 lg:px-24">
-      <div className="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4">
+    <nav className="px-6 py-6 lg:px-12">
+      <div className="max-w-6xl mx-auto flex items-center justify-between">
         <Logo />
         <Buttons />
       </div>
@@ -34,24 +42,24 @@ const Buttons = () => {
 
   if (userId) {
     return (
-      <Link href="/my-snippets" className="w-full sm:w-auto">
-        <button className="w-full sm:w-auto bg-violet-500 hover:bg-violet-600 px-6 py-2 rounded-lg text-white font-medium transition-colors">
-          Access The App
+      <Link href="/my-snippets">
+        <button className="bg-black hover:bg-gray-800 px-6 py-2.5 rounded-full text-white text-sm font-medium transition-all duration-200 hover:scale-105">
+          Access App
         </button>
       </Link>
     );
   }
 
   return (
-    <div className="flex flex-col sm:flex-row gap-4 w-full sm:w-auto">
-      <Link href="/sign-in" className="w-full sm:w-auto">
-        <button className="w-full bg-violet-500 hover:bg-violet-600 px-6 py-2 rounded-lg text-white font-medium transition-colors">
+    <div className="flex items-center gap-3">
+      <Link href="/sign-in">
+        <button className="text-gray-600 hover:text-gray-900 px-4 py-2 text-sm font-medium transition-colors">
           Sign In
         </button>
       </Link>
-      <Link href="/sign-up" className="w-full sm:w-auto">
-        <button className="w-full border-2 border-violet-600 hover:bg-violet-500 hover:text-white px-6 py-2 rounded-lg text-violet-600 font-medium transition-colors">
-          Sign Up
+      <Link href="/sign-up">
+        <button className="bg-black hover:bg-gray-800 px-6 py-2.5 rounded-full text-white text-sm font-medium transition-all duration-200 hover:scale-105">
+          Get Started
         </button>
       </Link>
     </div>
@@ -59,73 +67,253 @@ const Buttons = () => {
 };
 
 const Hero = () => {
+  const TechGrid = () => (
+    <div className="absolute inset-0 overflow-hidden pointer-events-none">
+      {/* Main grid lines */}
+      <svg
+        className="absolute inset-0 w-full h-full"
+        preserveAspectRatio="none"
+      >
+        <defs>
+          <pattern
+            id="grid"
+            width="60"
+            height="60"
+            patternUnits="userSpaceOnUse"
+          >
+            <path
+              d="M 60 0 L 0 0 0 60"
+              fill="none"
+              stroke="rgb(59 130 246 / 0.3)"
+              strokeWidth="1"
+            />
+          </pattern>
+          <linearGradient id="line-gradient" x1="0%" y1="0%" x2="100%" y2="0%">
+            <stop offset="0%" stopColor="rgb(59 130 246 / 0)" />
+            <stop offset="50%" stopColor="rgb(59 130 246 / 0.6)" />
+            <stop offset="100%" stopColor="rgb(59 130 246 / 0)" />
+          </linearGradient>
+        </defs>
+        <rect width="100%" height="100%" fill="url(#grid)" />
+      </svg>
+
+      {/* Floating code elements - hidden on small screens, repositioned on tablets */}
+      <div className="hidden sm:block absolute top-1/4 left-4 sm:left-8 lg:left-12 text-xs font-mono text-blue-400/60 animate-float">
+        <div className="bg-white/80 backdrop-blur-sm rounded-lg p-2 sm:p-3 border border-blue-200/50 shadow-lg">
+          <div className="flex items-center gap-1 sm:gap-2 mb-1">
+            <div className="w-1.5 h-1.5 sm:w-2 sm:h-2 bg-green-400 rounded-full"></div>
+            <div className="w-1.5 h-1.5 sm:w-2 sm:h-2 bg-yellow-400 rounded-full"></div>
+            <div className="w-1.5 h-1.5 sm:w-2 sm:h-2 bg-red-400 rounded-full"></div>
+          </div>
+          <code className="text-gray-700 text-xs">const ai = generate()</code>
+        </div>
+      </div>
+
+      <div
+        className="hidden sm:block absolute top-1/3 right-4 sm:right-8 lg:right-16 text-xs font-mono text-purple-400/60 animate-float"
+        style={{ animationDelay: '2s' }}
+      >
+        <div className="bg-white/80 backdrop-blur-sm rounded-lg p-2 sm:p-3 border border-purple-200/50 shadow-lg">
+          <div className="flex items-center gap-1 sm:gap-2 mb-1">
+            <div className="w-1.5 h-1.5 sm:w-2 sm:h-2 bg-green-400 rounded-full"></div>
+            <div className="w-1.5 h-1.5 sm:w-2 sm:h-2 bg-yellow-400 rounded-full"></div>
+            <div className="w-1.5 h-1.5 sm:w-2 sm:h-2 bg-red-400 rounded-full"></div>
+          </div>
+          <code className="text-gray-700 text-xs">transform.py</code>
+        </div>
+      </div>
+
+      <div
+        className="hidden md:block absolute bottom-1/4 left-1/4 text-xs font-mono text-cyan-400/60 animate-float"
+        style={{ animationDelay: '4s' }}
+      >
+        <div className="bg-white/80 backdrop-blur-sm rounded-lg p-2 sm:p-3 border border-cyan-200/50 shadow-lg">
+          <div className="flex items-center gap-1 sm:gap-2 mb-1">
+            <div className="w-1.5 h-1.5 sm:w-2 sm:h-2 bg-green-400 rounded-full"></div>
+            <div className="w-1.5 h-1.5 sm:w-2 sm:h-2 bg-yellow-400 rounded-full"></div>
+            <div className="w-1.5 h-1.5 sm:w-2 sm:h-2 bg-red-400 rounded-full"></div>
+          </div>
+          <code className="text-gray-700 text-xs">modify(snippet)</code>
+        </div>
+      </div>
+    </div>
+  );
+
   return (
-    <div className="text-center px-4 sm:px-6 pt-16 sm:pt-24 pb-16">
-      <div className="max-w-3xl mx-auto space-y-6">
-        <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold text-gray-800 px-4">
-          Your Personal Library for
-          <span className="text-violet-600 block mt-2">Code Snippets</span>
+    <div className="relative text-center px-4 sm:px-6 pt-12 sm:pt-16 lg:pt-20 pb-6 sm:pb-8 lg:pb-24 overflow-hidden min-h-0">
+      <TechGrid />
+
+      <div className="max-w-4xl mx-auto relative z-10">
+        <div className="inline-flex items-center gap-2 bg-blue-50/80 backdrop-blur-sm border border-blue-200/80 rounded-full px-3 sm:px-4 py-1.5 sm:py-2 text-xs sm:text-sm text-blue-700 font-medium mb-6 sm:mb-8 shadow-lg">
+          <Sparkles className="w-3 h-3 sm:w-4 sm:h-4 animate-pulse" />
+          <span className="whitespace-nowrap">
+            Now with AI-powered features
+          </span>
+        </div>
+
+        <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-gray-900 leading-tight mb-4 sm:mb-6 relative px-2">
+          <span className="block">Smart snippet manager</span>
+          <span className="bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent block mt-1 sm:mt-0">
+            Powered by AI
+          </span>
         </h1>
-        <p className="text-base sm:text-lg font-medium text-gray-600 max-w-xl mx-auto px-4">
-          Store, organize, and access your code snippets in one place. With
-          real-time editing, custom tags, and smart organization features,
-          Codebin makes code management effortless.
-        </p>
-        <Link href="/sign-up" className="block px-4">
-          <button className="w-full sm:w-auto bg-violet-500 hover:bg-violet-600 px-8 py-3 rounded-full text-white font-medium text-lg transition-colors">
-            Start Organizing Today
-          </button>
-        </Link>
+
+        <div className="text-base sm:text-lg lg:text-xl text-gray-600 max-w-2xl mx-auto mb-8 sm:mb-10 leading-relaxed relative px-4 sm:px-0">
+          Store, organize, and enhance your code snippets with AI. Generate new
+          snippets, modify existing ones, and transform languages instantly.
+          {/* Tech accent lines - hidden on mobile */}
+          <div className="hidden sm:block absolute -left-8 top-1/2 w-4 h-px bg-gradient-to-r from-blue-400/60 to-transparent"></div>
+          <div className="hidden sm:block absolute -right-8 top-1/2 w-4 h-px bg-gradient-to-l from-purple-400/60 to-transparent"></div>
+        </div>
+
+        <div className="flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-4 relative px-4 sm:px-0">
+          <Link href="/sign-up">
+            <button className="w-full sm:w-auto relative bg-black hover:bg-gray-800 px-6 sm:px-8 py-3 sm:py-4 rounded-full text-white font-medium text-base sm:text-lg transition-all duration-200 hover:scale-105 shadow-lg overflow-hidden group">
+              <span className="relative z-10">Start Building</span>
+              <div className="absolute inset-0 bg-gradient-to-r from-blue-600/20 to-purple-600/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+            </button>
+          </Link>
+          <Link href="#features">
+            <button className="w-full sm:w-auto text-gray-600 hover:text-gray-900 px-6 sm:px-8 py-3 sm:py-4 font-medium text-base sm:text-lg transition-colors relative group">
+              See Features
+              <div className="absolute bottom-2 left-6 right-6 sm:left-8 sm:right-8 h-px bg-gradient-to-r from-transparent via-gray-400 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+            </button>
+          </Link>
+        </div>
       </div>
     </div>
   );
 };
-
 const Features = () => {
-  const features = [
-    {
-      icon: <Clock className="w-6 h-6" />,
-      title: 'Real-time Editing',
-      description:
-        'Write and edit your code snippets in real-time with automatic saving',
-    },
-    {
-      icon: <Hash className="w-6 h-6" />,
-      title: 'Custom Tags',
-      description:
-        'Organize snippets with customizable tags for easy categorization',
-    },
-    {
-      icon: <Globe className="w-6 h-6" />,
-      title: 'Language Support',
-      description:
-        'Support for all major programming languages with syntax highlighting',
-    },
-    {
-      icon: <Star className="w-6 h-6" />,
-      title: 'Favorites',
-      description: 'Mark important snippets as favorites for quick access',
-    },
-  ];
-
   return (
-    <div className="bg-white py-12 sm:py-16 px-4 sm:px-6">
-      <div className="max-w-7xl mx-auto ">
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-8 ">
-          {features.map((feature, index) => (
-            <div
-              key={index}
-              className="p-6 rounded-xl bg-[#ededed] hover:shadow-lg text-center transition-shadow"
-            >
-              <div className="w-12 h-12 bg-violet-500 rounded-lg flex mx-auto items-center justify-center text-white mb-4">
-                {feature.icon}
+    <div id="features" className="py-24 px-6 relative">
+      {/* Background tech decoration */}
+      <div className="absolute inset-0 overflow-hidden">
+        <div className="absolute top-20 left-10 w-px h-32 bg-gradient-to-b from-transparent via-gray-200/50 to-transparent"></div>
+        <div className="absolute top-40 right-20 w-32 h-px bg-gradient-to-r from-transparent via-gray-200/50 to-transparent"></div>
+        <div className="absolute bottom-40 left-1/4 w-4 h-4 border border-gray-200/50 rounded transform rotate-45"></div>
+      </div>
+
+      <div className="max-w-7xl mx-auto relative">
+        <div className="text-center mb-16">
+          <h2 className="text-3xl lg:text-4xl font-bold text-gray-900 mb-4">
+            Everything you need to manage code
+          </h2>
+          <p className="text-xl text-gray-600 max-w-2xl mx-auto">
+            Powerful features that make code snippet management effortless and
+            intelligent
+          </p>
+        </div>
+
+        {/* Bento Grid Layout */}
+        <div className="grid grid-cols-1 md:grid-cols-4 lg:grid-cols-6 gap-6 auto-rows-fr">
+          {/* AI Snippet Generation - Large */}
+          <div className="md:col-span-2 lg:col-span-3 group relative p-8 rounded-3xl bg-gradient-to-br from-purple-50 to-pink-50 border border-purple-100/50 hover:border-purple-200 hover:shadow-2xl transition-all duration-500 min-h-[280px]">
+            <div className="relative z-10">
+              <div className="w-16 h-16 bg-gradient-to-r from-purple-500 to-pink-500 rounded-2xl flex items-center justify-center text-white mb-6 group-hover:scale-110 transition-transform duration-300">
+                <Sparkles className="w-8 h-8" />
               </div>
-              <h3 className="text-lg font-semibold mb-2">{feature.title}</h3>
-              <p className="text-gray-600  font-medium">
-                {feature.description}
+              <h3 className="text-2xl font-bold text-gray-900 mb-4">
+                AI Snippet Generation
+              </h3>
+              <p className="text-gray-600 leading-relaxed text-lg">
+                Generate code snippets from natural language descriptions using
+                advanced AI models
               </p>
             </div>
-          ))}
+          </div>
+
+          {/* AI-Powered Modifications - Large */}
+          <div className="md:col-span-2 lg:col-span-3 group relative p-8 rounded-3xl bg-gradient-to-br from-blue-50 to-cyan-50 border border-blue-100/50 hover:border-blue-200 hover:shadow-2xl transition-all duration-500 min-h-[280px]">
+            <div className="relative z-10">
+              <div className="w-16 h-16 bg-gradient-to-r from-blue-500 to-cyan-500 rounded-2xl flex items-center justify-center text-white mb-6 group-hover:scale-110 transition-transform duration-300">
+                <Zap className="w-8 h-8" />
+              </div>
+              <h3 className="text-2xl font-bold text-gray-900 mb-4">
+                AI-Powered Modifications
+              </h3>
+              <p className="text-gray-600 leading-relaxed text-lg">
+                Enhance and modify your existing snippets with intelligent AI
+                assistance
+              </p>
+            </div>
+          </div>
+
+          {/* Dynamic Language Transform - Medium */}
+          <div className="md:col-span-2 lg:col-span-2 group relative p-6 rounded-3xl bg-gradient-to-br from-green-50 to-emerald-50 border border-green-100/50 hover:border-green-200 hover:shadow-xl transition-all duration-500">
+            <div className="relative z-10">
+              <div className="w-12 h-12 bg-gradient-to-r from-green-500 to-emerald-500 rounded-xl flex items-center justify-center text-white mb-4 group-hover:scale-110 transition-transform duration-300">
+                <RefreshCw className="w-6 h-6" />
+              </div>
+              <h3 className="text-xl font-semibold text-gray-900 mb-3">
+                Dynamic Language Transform
+              </h3>
+              <p className="text-gray-600 leading-relaxed">
+                Convert snippets between programming languages instantly
+              </p>
+            </div>
+          </div>
+
+          {/* Real-time Editing - Medium */}
+          <div className="md:col-span-2 lg:col-span-2 group relative p-6 rounded-3xl bg-gradient-to-br from-orange-50 to-red-50 border border-orange-100/50 hover:border-orange-200 hover:shadow-xl transition-all duration-500">
+            <div className="relative z-10">
+              <div className="w-12 h-12 bg-gradient-to-r from-orange-500 to-red-500 rounded-xl flex items-center justify-center text-white mb-4 group-hover:scale-110 transition-transform duration-300">
+                <Clock className="w-6 h-6" />
+              </div>
+              <h3 className="text-xl font-semibold text-gray-900 mb-3">
+                Real-time Editing
+              </h3>
+              <p className="text-gray-600 leading-relaxed">
+                Write and edit with automatic saving and live syntax
+                highlighting
+              </p>
+            </div>
+          </div>
+
+          {/* Smart Organization - Medium */}
+          <div className="md:col-span-2 lg:col-span-2 group relative p-6 rounded-3xl bg-gradient-to-br from-indigo-50 to-purple-50 border border-indigo-100/50 hover:border-indigo-200 hover:shadow-xl transition-all duration-500">
+            <div className="relative z-10">
+              <div className="w-12 h-12 bg-gradient-to-r from-indigo-500 to-purple-500 rounded-xl flex items-center justify-center text-white mb-4 group-hover:scale-110 transition-transform duration-300">
+                <Hash className="w-6 h-6" />
+              </div>
+              <h3 className="text-xl font-semibold text-gray-900 mb-3">
+                Smart Organization
+              </h3>
+              <p className="text-gray-600 leading-relaxed">
+                Organize with custom tags and intelligent categorization
+              </p>
+            </div>
+          </div>
+
+          {/* Universal Language Support - Small */}
+          <div className="md:col-span-2 lg:col-span-2 group relative p-6 rounded-3xl bg-gradient-to-br from-teal-50 to-blue-50 border border-teal-100/50 hover:border-teal-200 hover:shadow-xl transition-all duration-500">
+            <div className="relative z-10">
+              <div className="w-12 h-12 bg-gradient-to-r from-teal-500 to-blue-500 rounded-xl flex items-center justify-center text-white mb-4 group-hover:scale-110 transition-transform duration-300">
+                <Globe className="w-6 h-6" />
+              </div>
+              <h3 className="text-xl font-semibold text-gray-900 mb-3">
+                Universal Language Support
+              </h3>
+              <p className="text-gray-600 leading-relaxed">
+                Support for all major programming languages with perfect syntax
+              </p>
+            </div>
+          </div>
+
+          {/* Quick Favorites - Small */}
+          <div className="md:col-span-2 lg:col-span-2 group relative p-6 rounded-3xl bg-gradient-to-br from-yellow-50 to-orange-50 border border-yellow-100/50 hover:border-yellow-200 hover:shadow-xl transition-all duration-500">
+            <div className="relative z-10">
+              <div className="w-12 h-12 bg-gradient-to-r from-yellow-500 to-orange-500 rounded-xl flex items-center justify-center text-white mb-4 group-hover:scale-110 transition-transform duration-300">
+                <Star className="w-6 h-6" />
+              </div>
+              <h3 className="text-xl font-semibold text-gray-900 mb-3">
+                Quick Favorites
+              </h3>
+              <p className="text-gray-600 leading-relaxed">
+                Mark important snippets as favorites for instant access
+              </p>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -136,31 +324,32 @@ const Footer = () => {
   const currentYear = new Date().getFullYear();
 
   return (
-    <footer className="w-full py-6 px-4 mt-auto ">
-      <div className="max-w-7xl mx-auto flex flex-col sm:flex-row justify-between items-center gap-4">
-        <div className="flex items-center space-x-4">
-          <p className="text-sm text-gray-600">
+    <footer className="border-t border-gray-100 py-12 px-6 bg-white">
+      <div className="max-w-6xl mx-auto flex flex-col md:flex-row justify-between items-center gap-6">
+        <div className="flex items-center gap-6">
+          <p className="text-sm text-gray-500">
             © {currentYear} Codebin by Piyush
           </p>
-          <span className="h-4 w-px bg-gray-300 hidden sm:block" />
-          <a
-            href="#"
-            className="text-sm text-gray-700 hover:text-violet-600 transition-colors"
-          >
-            Privacy Policy
-          </a>
-          <a
-            href="#"
-            className="text-sm text-gray-600 hover:text-violet-600 transition-colors"
-          >
-            Terms of Service
-          </a>
+          <div className="hidden md:flex items-center gap-6">
+            <a
+              href="#"
+              className="text-sm text-gray-500 hover:text-gray-900 transition-colors"
+            >
+              Privacy Policy
+            </a>
+            <a
+              href="#"
+              className="text-sm text-gray-500 hover:text-gray-900 transition-colors"
+            >
+              Terms of Service
+            </a>
+          </div>
         </div>
 
-        <div className="flex items-center space-x-6">
+        <div className="flex items-center gap-6">
           <a
             href="#"
-            className="text-gray-600 hover:text-violet-600 transition-colors"
+            className="text-gray-400 hover:text-gray-600 transition-colors"
           >
             <span className="sr-only">Twitter</span>
             <svg className="h-5 w-5" fill="currentColor" viewBox="0 0 24 24">
@@ -169,7 +358,7 @@ const Footer = () => {
           </a>
           <a
             href="#"
-            className="text-gray-600 hover:text-violet-600 transition-colors"
+            className="text-gray-400 hover:text-gray-600 transition-colors"
           >
             <span className="sr-only">GitHub</span>
             <svg className="h-5 w-5" fill="currentColor" viewBox="0 0 24 24">
@@ -182,7 +371,7 @@ const Footer = () => {
           </a>
           <a
             href="#"
-            className="text-gray-600 hover:text-violet-600 transition-colors"
+            className="text-gray-400 hover:text-gray-600 transition-colors"
           >
             <span className="sr-only">LinkedIn</span>
             <svg className="h-5 w-5" fill="currentColor" viewBox="0 0 24 24">
