@@ -632,6 +632,14 @@ function CodeBlock({
         isTrash: false,
       };
 
+      // Update the selected language in the UI
+      const matchedLanguage = programmingLanguages.find(
+        lang => lang.name.toLowerCase() === newNote.language.toLowerCase()
+      );
+      if (matchedLanguage) {
+        setSelectedLanguage(matchedLanguage);
+      }
+
       // Save as a new note
       await saveNoteInDB(
         newNote,

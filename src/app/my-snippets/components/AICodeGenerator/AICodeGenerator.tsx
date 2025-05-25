@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { SingleNoteType, SingleTagType } from '@/app/Types';
 import { useGlobalContext } from '@/ContextApi';
+import programmingLanguages from '@/app/localData/Languages';
 
 interface AICodeGeneratorProps {
   isOpen: boolean;
@@ -23,6 +24,15 @@ export default function AICodeGenerator({
     sharedUserIdObject: { sharedUserId },
     allTagsObject: { allTags, setAllTags },
   } = useGlobalContext();
+
+  // Function to find the matching supported language
+  const findMatchingLanguage = (detectedLanguage: string): string => {
+    const normalizedDetectedLang = detectedLanguage.toLowerCase();
+    const matchedLanguage = programmingLanguages.find(
+      lang => lang.name.toLowerCase() === normalizedDetectedLang
+    );
+    return matchedLanguage?.name || selectedLanguage;
+  };
 
   const generateCode = async () => {
     if (!prompt.trim()) return;
@@ -116,7 +126,7 @@ export default function AICodeGenerator({
         title: data.title,
         description: data.description,
         code: data.code,
-        language: selectedLanguage,
+        language: data.suggestedTags?.[0] ? findMatchingLanguage(data.suggestedTags[0]) : selectedLanguage,
         creationDate: new Date().toISOString(),
         tags: noteTags,
         clerkUserId: sharedUserId,
