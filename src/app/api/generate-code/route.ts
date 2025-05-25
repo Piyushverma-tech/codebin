@@ -5,7 +5,6 @@ import {
 } from '@google/generative-ai';
 import { NextResponse } from 'next/server';
 
-// Check if API key is available
 if (!process.env.GEMINI_API_KEY) {
   console.error('GEMINI_API_KEY is not set in environment variables');
 }
@@ -22,7 +21,7 @@ export async function POST(request: Request) {
       );
     }
 
-    const { prompt, language } = await request.json();
+    const { prompt, language, isModification } = await request.json();
 
     if (!prompt) {
       return NextResponse.json(
@@ -31,18 +30,26 @@ export async function POST(request: Request) {
       );
     }
 
-    const enhancedPrompt = `Generate a code snippet based on this request: "${prompt}"
-Please provide the response in the following JSON format:
-{
-  "title": "A clear, concise title for this code snippet (max 50 chars)",
-  "description": "A brief explanation of what the code does (max 200 chars)",
-  "code": "The actual code implementation"
-}
-
-The code should be in user's preferred language, if not provided then default to "${language}".
-Make the title descriptive but concise.
-The description should explain the purpose and key features.
-Provide only the JSON response, no additional text or markdown.`;
+    // Different prompt format for modifications vs new code generation
+    const enhancedPrompt = isModification
+      ? prompt // For modifications, use the prompt as is
+      : `Generate a code snippet based on this request: "${prompt}"
+    Please provide the response in the following JSON format:
+    {
+      "title": "A clear, concise title for this code snippet (max 50 chars)",
+      "description": "A brief explanation of what the code does (max 200 chars)",
+      "code": "The actual code implementation",
+      "suggestedTags": ["tag1", "tag2", "tag3"] // Only 3 tags: 1st - code language, 2nd - main functionality, 3rd - category/topic
+    }
+    
+    The code should be in user's preferred language, if not provided then default to "${language}".
+    Make the title descriptive but concise.
+    The description should explain the purpose and key features.
+    The suggestedTags must include exactly three tags:
+    1. The programming language (e.g., "Python", "JavaScript"),
+    2. The core functionality (e.g., "validation", "API", "sorting"),
+    3. A broader category or context (e.g., "backend", "frontend", "data-processing").
+    Provide only the JSON response, no additional text or markdown.`;
 
     // Configure the model with safety settings
     const model = genAI.getGenerativeModel({
@@ -79,32 +86,38 @@ Provide only the JSON response, no additional text or markdown.`;
         throw new Error('Generated content is empty');
       }
 
-      try {
-        // Parse the response as JSON
-        const parsedResponse = JSON.parse(
-          text.replace(/```json\n?|\n?```/g, '').trim()
-        );
+      // Handle the response differently based on request type
+      if (isModification) {
+        // For modifications, return the text directly
+        return NextResponse.json(text.trim());
+      } else {
+        // For new code generation, parse as JSON
+        try {
+          const parsedResponse = JSON.parse(
+            text.replace(/```json\n?|\n?```/g, '').trim()
+          );
 
-        // Validate the response structure
-        if (
-          !parsedResponse.title ||
-          !parsedResponse.description ||
-          !parsedResponse.code
-        ) {
-          throw new Error('Invalid response format');
+          if (
+            !parsedResponse.title ||
+            !parsedResponse.description ||
+            !parsedResponse.code
+          ) {
+            throw new Error('Invalid response format');
+          }
+
+          return NextResponse.json({
+            title: parsedResponse.title,
+            description: parsedResponse.description,
+            code: parsedResponse.code.trim(),
+            suggestedTags: parsedResponse.suggestedTags || [],
+          });
+        } catch (parseError) {
+          console.error('Error parsing AI response:', parseError);
+          return NextResponse.json(
+            { error: 'Invalid AI response format' },
+            { status: 500 }
+          );
         }
-
-        return NextResponse.json({
-          title: parsedResponse.title,
-          description: parsedResponse.description,
-          code: parsedResponse.code.trim(),
-        });
-      } catch (parseError) {
-        console.error('Error parsing AI response:', parseError);
-        return NextResponse.json(
-          { error: 'Invalid AI response format' },
-          { status: 500 }
-        );
       }
     } catch (genError) {
       console.error('Gemini API Error:', genError);

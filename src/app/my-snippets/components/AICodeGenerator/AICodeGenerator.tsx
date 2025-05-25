@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { SingleNoteType } from '@/app/Types';
+import React, { useEffect, useRef, useState } from 'react';
+import { SingleNoteType, SingleTagType } from '@/app/Types';
 import { useGlobalContext } from '@/ContextApi';
 
 interface AICodeGeneratorProps {
@@ -21,6 +21,7 @@ export default function AICodeGenerator({
   const {
     darkModeObject: { darkMode },
     sharedUserIdObject: { sharedUserId },
+    allTagsObject: { allTags, setAllTags },
   } = useGlobalContext();
 
   const generateCode = async () => {
@@ -55,18 +56,76 @@ export default function AICodeGenerator({
         throw new Error('Incomplete code generation response');
       }
 
-      onCodeGenerated({
+      console.log('AI Response:', data); // Debug log
+
+      // Create any suggested tags that don't exist yet
+      let noteTags: SingleTagType[] = [];
+      if (data.suggestedTags && Array.isArray(data.suggestedTags)) {
+        const createTagPromises = data.suggestedTags.map(
+          async (tagName: string) => {
+            // Check if tag already exists
+            const existingTag = allTags.find(
+              (tag: SingleTagType) =>
+                tag.name.toLowerCase() === tagName.toLowerCase()
+            );
+
+            if (existingTag) {
+              return existingTag;
+            }
+
+            // Create new tag
+            try {
+              const response = await fetch('/api/tags', {
+                method: 'POST',
+                headers: {
+                  'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                  name: tagName,
+                  clerkUserId: sharedUserId,
+                }),
+              });
+
+              if (!response.ok) {
+                throw new Error('Failed to create tag');
+              }
+
+              const data = await response.json();
+              const newTag: SingleTagType = {
+                _id: data.tags._id,
+                name: data.tags.name,
+                clerkUserId: data.tags.clerkUserId,
+              };
+
+              setAllTags((prevTags: SingleTagType[]) => [...prevTags, newTag]);
+              return newTag;
+            } catch (error) {
+              console.error('Error creating tag:', error);
+              return null;
+            }
+          }
+        );
+
+        const createdTags = await Promise.all(createTagPromises);
+        noteTags = createdTags.filter(
+          (tag): tag is SingleTagType => tag !== null
+        );
+      }
+
+      const noteData = {
         title: data.title,
         description: data.description,
         code: data.code,
         language: selectedLanguage,
         creationDate: new Date().toISOString(),
-        tags: [],
+        tags: noteTags,
         clerkUserId: sharedUserId,
         isFavorite: false,
         isTrash: false,
-      });
+      };
 
+      onCodeGenerated(noteData);
+      setPrompt('');
       onClose();
     } catch (error) {
       console.error('Error generating code:', error);
@@ -77,6 +136,11 @@ export default function AICodeGenerator({
       setIsLoading(false);
     }
   };
+
+  const inputRef = useRef<HTMLTextAreaElement>(null);
+  useEffect(() => {
+    inputRef.current?.focus();
+  }, [isOpen]);
 
   if (!isOpen) return null;
 
@@ -97,6 +161,7 @@ export default function AICodeGenerator({
           Generate Code with AI
         </h2>
         <textarea
+          ref={inputRef}
           value={prompt}
           onChange={(e) => setPrompt(e.target.value)}
           placeholder="Describe the code you want to generate..."

@@ -22,6 +22,7 @@ function ContentArea() {
     >
       <TopBar />
       <NotesArea />
+      <TagsWindow />
       <AddTagWindow />
     </div>
   );
@@ -67,7 +68,7 @@ function NotesArea() {
         <AllNotesSection />
       </div>
       <ContentNote />
-      <TagsWindow />
+   
     </div>
   );
 }

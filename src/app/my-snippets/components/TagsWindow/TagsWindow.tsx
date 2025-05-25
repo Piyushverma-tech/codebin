@@ -104,20 +104,28 @@ function TagsWindow() {
 
   return (
     <>
+      {/* Backdrop */}
+      <div 
+        className="fixed inset-0 bg-black/20 z-30"
+        onClick={() => setOpenTagsWindow(false)}
+      ></div>
+      
       {/* Modal */}
       <div
         className={`${
           isMobile
             ? 'fixed left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-full z-50'
-            : 'w-[32%] '
+            : 'fixed right-4 top-24 w-[400px] z-50'
         } ${
           darkMode[1].isSelected ? 'bg-zinc-900' : 'bg-gray-50 '
-        } rounded-xl p-6 h-[580px] z-40`}
+        } rounded-xl p-6 h-[580px] z-40 flex flex-col shadow-xl border ${
+          darkMode[1].isSelected ? 'border-zinc-700' : 'border-gray-200'
+        }`}
         role="dialog"
         aria-modal="true"
       >
         {/* Header */}
-        <div className="flex justify-between items-center mb-6">
+        <div className="flex justify-between items-center mb-6 flex-shrink-0">
           <div className="flex items-center gap-2">
             <Tag className="h-5 w-5 text-violet-600" />
             <h2
@@ -125,7 +133,7 @@ function TagsWindow() {
                 darkMode[1].isSelected ? 'text-slate-300' : 'text-gray-900'
               } text-gray-900`}
             >
-              Tags
+             Manage Tags
             </h2>
           </div>
           <button
@@ -137,34 +145,42 @@ function TagsWindow() {
         </div>
 
         {/* Search and Add */}
-        <SearchBar searchQuery={searchQuery} setSearchQuery={setSearchQuery} />
+        <div className="flex-shrink-0">
+          <SearchBar searchQuery={searchQuery} setSearchQuery={setSearchQuery} />
+        </div>
 
-        {/* Tags List */}
-        <div className="mt-4 h-[400px]  overflow-y-auto space-y-2 ">
-          {filterAllItemFromAllTags.length === 0 && (
-            <EmpthyPlaceHolder
-              muiIcon={<Tag size={68} className="text-slate-400" />}
-              text={
-                <span className="text-slate-400 font-light">
-                  No tags has been created yet...
-                </span>
-              }
-            />
-          )}
-          {/*  */}
-          {filterAllTagsBasedOnSearchQuery.length === 0 &&
-            filterAllItemFromAllTags.length !== 0 && (
-              <EmpthyPlaceHolder
-                muiIcon={<SearchIcon size={55} className="text-slate-400" />}
-                text={<span className="text-slate-400">No Tags Found</span>}
-              />
-            )}
-          {/*  */}
-          {filterAllTagsBasedOnSearchQuery.map((tag) => (
-            <div key={tag._id}>
-              <SingleTag tag={tag} />
+        {/* Tags List - Fixed scrollable container */}
+        <div className="mt-6 flex-1 min-h-0">
+          <div className="h-full overflow-y-auto scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-transparent hover:scrollbar-thumb-gray-400">
+            <div className="pr-2">
+              {filterAllItemFromAllTags.length === 0 && (
+                <EmpthyPlaceHolder
+                  muiIcon={<Tag size={68} className="text-slate-400" />}
+                  text={
+                    <span className="text-slate-400 font-light">
+                      No tags has been created yet...
+                    </span>
+                  }
+                />
+              )}
+              {/*  */}
+              {filterAllTagsBasedOnSearchQuery.length === 0 &&
+                filterAllItemFromAllTags.length !== 0 && (
+                  <EmpthyPlaceHolder
+                    muiIcon={<SearchIcon size={55} className="text-slate-400" />}
+                    text={<span className="text-slate-400">No Tags Found</span>}
+                  />
+                )}
+              {/*  */}
+              <div className="space-y-2">
+                {filterAllTagsBasedOnSearchQuery.map((tag) => (
+                  <div key={tag._id}>
+                    <SingleTag tag={tag} />
+                  </div>
+                ))}
+              </div>
             </div>
-          ))}
+          </div>
         </div>
       </div>
     </>
@@ -247,27 +263,27 @@ function SingleTag({ tag }: { tag: SingleTagType }) {
         darkMode[1].isSelected
           ? 'bg-neutral-900 border-zinc-500'
           : 'bg-white border-gray-100'
-      }  rounded-lg p-2 shadow-sm hover:shadow transition-all border `}
+      } rounded-lg p-2 shadow-sm hover:shadow transition-all border`}
     >
       <div className="flex items-center justify-between">
-        <div className="flex items-center gap-4">
-          <GripVertical className="h-5 w-5 text-gray-400 cursor-move opacity-0 group-hover:opacity-100 transition-opacity" />
-          <div className="h-2.5 w-2.5 rounded-full bg-violet-500" />
-          <div>
+        <div className="flex items-center gap-4 min-w-0 flex-1">
+          <GripVertical className="h-5 w-5 text-gray-400 cursor-move opacity-0 group-hover:opacity-100 transition-opacity flex-shrink-0" />
+          <div className="h-2.5 w-2.5 rounded-full bg-violet-500 flex-shrink-0" />
+          <div className="min-w-0 flex-1">
             <h3
               className={`font-medium text-[14px] ${
                 darkMode[1].isSelected ? 'text-slate-200' : 'text-gray-900'
-              } `}
+              } truncate`}
             >
               {tag.name}
             </h3>
-            <p className="text-xs text-gray-400">
+            <p className="text-xs text-gray-400 truncate">
               {countTagInAllNotes(tag)} Snippets
             </p>
           </div>
         </div>
 
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-2 flex-shrink-0">
           <button
             className="p-2 rounded-full hover:bg-gray-400/20 text-gray-500 transition-colors"
             onClick={() => openTagWindow(tag)}

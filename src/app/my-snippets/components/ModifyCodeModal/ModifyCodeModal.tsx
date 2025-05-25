@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { useGlobalContext } from '@/ContextApi';
 import { toast } from 'react-hot-toast';
 
@@ -37,8 +37,9 @@ export default function ModifyCodeModal({
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          prompt: `Modify this ${language} code according to these instructions: "${prompt}"\n\nExisting code:\n${currentCode}\n\nProvide only the modified code without any explanations.`,
+          prompt: `Modify this ${language} code according to these instructions: "${prompt}"\n\nExisting code:\n${currentCode}\n\nProvide only the modified code without any explanations or markdown formatting.`,
           language,
+          isModification: true,
         }),
       });
 
@@ -52,12 +53,16 @@ export default function ModifyCodeModal({
         throw new Error(data.error);
       }
 
-      if (!data.code) {
+      // For modifications, we expect the response to be just the code
+      const modifiedCode = typeof data === 'string' ? data : data.code;
+
+      if (!modifiedCode) {
         throw new Error('No code was generated');
       }
 
-      onCodeModified(data.code);
+      onCodeModified(modifiedCode);
       toast.success('Code modified successfully!');
+      setPrompt('');
       onClose();
     } catch (error) {
       console.error('Error modifying code:', error);
@@ -68,6 +73,11 @@ export default function ModifyCodeModal({
       setIsLoading(false);
     }
   };
+
+  const inputRef = useRef<HTMLTextAreaElement>(null);
+  useEffect(() => {
+    inputRef.current?.focus();
+  }, [isOpen]);
 
   if (!isOpen) return null;
 
@@ -104,6 +114,7 @@ export default function ModifyCodeModal({
             Modification Instructions:
           </h3>
           <textarea
+            ref={inputRef}
             value={prompt}
             onChange={(e) => setPrompt(e.target.value)}
             placeholder="Describe how you want to modify the code (e.g., 'Add error handling', 'Optimize the loop', 'Add comments')"

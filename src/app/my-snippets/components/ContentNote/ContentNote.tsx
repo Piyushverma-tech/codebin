@@ -627,7 +627,7 @@ function CodeBlock({
         code: generatedNote.code || '',
         language: generatedNote.language || 'Javascript',
         creationDate: new Date().toISOString(),
-        tags: [],
+        tags: generatedNote.tags || [],
         isFavorite: false,
         isTrash: false,
       };
