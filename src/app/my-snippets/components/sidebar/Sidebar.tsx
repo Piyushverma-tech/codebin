@@ -32,7 +32,7 @@ export default function Sidebar() {
         ${
           darkMode[1].isSelected
             ? 'bg-neutral-950 border-zinc-800 shadow-2xl shadow-violet-500/5'
-            : 'bg-white border-slate-200 shadow-lg shadow-slate-300/50'
+            : 'bg-gray-50 border-slate-200 shadow-lg shadow-slate-300/50'
         }`}
       >
         <div className="flex justify-between">
