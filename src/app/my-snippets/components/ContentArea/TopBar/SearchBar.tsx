@@ -2,7 +2,7 @@
 import { openTheContentNote } from '@/app/EmpthyPlaceHolder';
 import { useGlobalContext } from '@/ContextApi';
 import { SearchOutlined } from '@mui/icons-material';
-import { PlusIcon } from 'lucide-react';
+import { WandSparkles } from 'lucide-react';
 
 function SearchBar() {
   const {
@@ -55,9 +55,9 @@ function SearchBar() {
             sharedUserId
           )
         }
-        className="absolute  flex gap-2 px-2  rounded-3xl bg-violet-500 sm:py-[10px] py-[6px]  text-[13px] text-white right-0 items-center cursor-pointer select-none"
+        className="absolute  flex gap-2 px-2  rounded-3xl bg-gradient-to-r from-blue-600 to-violet-600 sm:py-[10px] py-[6px]  text-[13px] text-white right-0 items-center cursor-pointer select-none"
       >
-        <PlusIcon className="w-[20px] h-[20px]" />
+        <WandSparkles className="w-[20px] h-[20px]" />
         <div className="text-md max-md:hidden">Snippet</div>
       </div>
     );

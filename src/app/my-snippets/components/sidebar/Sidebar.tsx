@@ -3,7 +3,7 @@
 import { useGlobalContext } from '@/ContextApi';
 import { useUser } from '@clerk/nextjs';
 import { useAuth } from '@clerk/clerk-react';
-import { LogOutIcon, X } from 'lucide-react';
+import { LogOutIcon } from 'lucide-react';
 import DarkMode from '../ContentArea/TopBar/DarkMode';
 import getLanguageIcon from '@/app/utils/languageTextToIcon';
 import dynamic from 'next/dynamic';
@@ -35,19 +35,11 @@ export default function Sidebar() {
             : 'bg-gray-50 border-slate-200 shadow-lg shadow-slate-300/50'
         }`}
       >
-        <div className="flex justify-between">
-          <X
-            onClick={() => setOpenSideBar(!openSideBar)}
-            className="text-slate-500 text-3xl size-5 cursor-pointer hidden max-sm:block"
-          />
+        <div className="flex justify-between mb-8 sm:ml-4 mt-4">
+          <Logo />
           <div className="max-md:flex hidden">
             <DarkMode />
           </div>
-        </div>
-
-        {/* Logo Container */}
-        <div className="flex items-center justify-center pr-2 mt-4 mb-8">
-          <Logo />
         </div>
 
         {/* Content Container */}

@@ -390,7 +390,7 @@ function NoteTags({
               </div>
             ))
           ) : (
-            <div className="text-slate-400 italic">No tags</div>
+            <div className="text-slate-400 italic">Select tags</div>
           )}
           {isMobile ? (
             <EditOutlined
@@ -634,7 +634,7 @@ function CodeBlock({
 
       // Update the selected language in the UI
       const matchedLanguage = programmingLanguages.find(
-        lang => lang.name.toLowerCase() === newNote.language.toLowerCase()
+        (lang) => lang.name.toLowerCase() === newNote.language.toLowerCase()
       );
       if (matchedLanguage) {
         setSelectedLanguage(matchedLanguage);
