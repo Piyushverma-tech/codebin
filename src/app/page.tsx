@@ -1,5 +1,5 @@
 'use client';
-import React from 'react';
+import React, { useState } from 'react';
 import { useAuth } from '@clerk/nextjs';
 import {
   Star,
@@ -9,6 +9,7 @@ import {
   Sparkles,
   Zap,
   RefreshCw,
+  Send,
 } from 'lucide-react';
 import Link from 'next/link';
 import { Logo } from './my-snippets/components/Logo/Logo';
@@ -19,6 +20,7 @@ const Home = () => {
       <Navbar />
       <Hero />
       <Features />
+      <FeedbackForm />
       <Footer />
     </div>
   );
@@ -320,6 +322,204 @@ const Features = () => {
   );
 };
 
+const FeedbackForm = () => {
+  const [formData, setFormData] = useState({
+    name: '',
+    email: '',
+    type: 'feedback', // or 'feature'
+    message: '',
+  });
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitted, setSubmitted] = useState(false);
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setIsSubmitting(true);
+
+    try {
+      const response = await fetch('https://api.web3forms.com/submit', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          access_key: 'a78f0286-8d52-4a42-8379-5812e7c41eb7',
+          ...formData,
+        }),
+      });
+
+      const data = await response.json();
+      if (data.success) {
+        setSubmitted(true);
+        setFormData({
+          name: '',
+          email: '',
+          type: 'feedback',
+          message: '',
+        });
+      }
+    } catch (error) {
+      console.error('Error submitting form:', error);
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  const handleChange = (
+    e: React.ChangeEvent<
+      HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
+    >
+  ) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({ ...prev, [name]: value }));
+  };
+
+  return (
+    <div className="py-16 px-6">
+      <div className="max-w-2xl mx-auto">
+        <div className="text-center mb-10">
+          <h2 className="text-3xl lg:text-4xl font-bold text-gray-900 mb-4">
+            Help Us Improve
+          </h2>
+          <p className="text-lg text-gray-600">
+            Share your feedback or request new features to help us make Codebin
+            even better.
+          </p>
+        </div>
+
+        {submitted ? (
+          <div className="text-center p-6 my-5">
+            <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
+              <svg
+                className="w-8 h-8 text-green-500"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth="2"
+                  d="M5 13l4 4L19 7"
+                />
+              </svg>
+            </div>
+            <h3 className="text-xl font-semibold text-gray-900 mb-2">
+              Thank You!
+            </h3>
+            <p className="text-gray-600">
+              Your submission has been received. We appreciate your feedback.
+            </p>
+          </div>
+        ) : (
+          <form
+            onSubmit={handleSubmit}
+            className=" bg-gradient-to-br from-indigo-50 to-purple-50 border border-indigo-100/50 rounded-2xl hover:shadow-xl p-8"
+          >
+            <div className="grid grid-cols-1 gap-6">
+              <div>
+                <label
+                  htmlFor="name"
+                  className="block text-sm font-medium text-gray-700 mb-1"
+                >
+                  Name
+                </label>
+                <input
+                  type="text"
+                  id="name"
+                  name="name"
+                  required
+                  value={formData.name}
+                  onChange={handleChange}
+                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-violet-500 focus:border-transparent transition-all"
+                  placeholder="Your name"
+                />
+              </div>
+
+              <div>
+                <label
+                  htmlFor="email"
+                  className="block text-sm font-medium text-gray-700 mb-1"
+                >
+                  Email
+                </label>
+                <input
+                  type="email"
+                  id="email"
+                  name="email"
+                  required
+                  value={formData.email}
+                  onChange={handleChange}
+                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-violet-500 focus:border-transparent transition-all"
+                  placeholder="your@email.com"
+                />
+              </div>
+
+              <div>
+                <label
+                  htmlFor="type"
+                  className="block text-sm font-medium text-gray-700 mb-1"
+                >
+                  Type
+                </label>
+                <select
+                  id="type"
+                  name="type"
+                  required
+                  value={formData.type}
+                  onChange={handleChange}
+                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-violet-500 focus:border-transparent transition-all"
+                >
+                  <option className="text-lg text-gray-900" value="feedback">
+                    Feedback
+                  </option>
+                  <option className="text-lg text-gray-900" value="feature">
+                    Feature Request
+                  </option>
+                </select>
+              </div>
+
+              <div>
+                <label
+                  htmlFor="message"
+                  className="block text-sm font-medium text-gray-700 mb-1"
+                >
+                  Message
+                </label>
+                <textarea
+                  id="message"
+                  name="message"
+                  required
+                  value={formData.message}
+                  onChange={handleChange}
+                  rows={4}
+                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-violet-500 focus:border-transparent transition-all"
+                  placeholder="Share your thoughts or feature request..."
+                />
+              </div>
+
+              <button
+                type="submit"
+                disabled={isSubmitting}
+                className="w-full bg-black hover:bg-gray-800 text-white font-medium py-3 px-6 rounded-lg transition-all duration-200 flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                {isSubmitting ? (
+                  <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+                ) : (
+                  <>
+                    <Send className="w-4 h-4" />
+                    <span>Submit</span>
+                  </>
+                )}
+              </button>
+            </div>
+          </form>
+        )}
+      </div>
+    </div>
+  );
+};
+
 const Footer = () => {
   const currentYear = new Date().getFullYear();
 
@@ -348,7 +548,8 @@ const Footer = () => {
 
         <div className="flex items-center gap-6">
           <a
-            href="#"
+            href="https://x.com/piyushvermaDev"
+            target="blank"
             className="text-gray-400 hover:text-gray-600 transition-colors"
           >
             <span className="sr-only">Twitter</span>
@@ -357,7 +558,8 @@ const Footer = () => {
             </svg>
           </a>
           <a
-            href="#"
+            href="https://github.com/Piyushverma-tech/"
+            target="blank"
             className="text-gray-400 hover:text-gray-600 transition-colors"
           >
             <span className="sr-only">GitHub</span>
@@ -370,7 +572,8 @@ const Footer = () => {
             </svg>
           </a>
           <a
-            href="#"
+            href="https://www.linkedin.com/in/piyush-verma-dev/"
+            target="blank"
             className="text-gray-400 hover:text-gray-600 transition-colors"
           >
             <span className="sr-only">LinkedIn</span>
