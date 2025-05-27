@@ -753,6 +753,7 @@ function CodeBlock({
               />
             ) : (
               <ContentCopyOutlined
+                titleAccess='Copy code'
                 onClick={() => clickedCopyBtn()}
                 sx={{ fontSize: 20 }}
                 className={`text-slate-400`}

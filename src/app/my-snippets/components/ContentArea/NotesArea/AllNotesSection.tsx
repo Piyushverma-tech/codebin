@@ -17,6 +17,7 @@ import { useCallback, useEffect, useState } from 'react';
 import EmpthyPlaceHolder from '@/app/EmpthyPlaceHolder';
 import { capitalizeFirstOccurrence } from '../../sidebar/Sidebar';
 import { Heart, Tag } from 'lucide-react';
+import { IoDuplicate } from 'react-icons/io5';
 
 function AllNotesSection() {
   const {
@@ -49,8 +50,12 @@ function AllNotesSection() {
 
     // Search filter logic
     if (searchBarQuery.trim() !== '') {
-      notes = notes.filter((note) =>
-        note.title.toLowerCase().includes(searchBarQuery.toLowerCase()) || note.tags.some((tag) => tag.name.toLowerCase().includes(searchBarQuery.toLowerCase()))
+      notes = notes.filter(
+        (note) =>
+          note.title.toLowerCase().includes(searchBarQuery.toLowerCase()) ||
+          note.tags.some((tag) =>
+            tag.name.toLowerCase().includes(searchBarQuery.toLowerCase())
+          )
       );
     }
 
@@ -292,7 +297,8 @@ function NoteHeader({
     }
   }
 
-  async function handleClickedCheckbox() {
+  async function handleClickedCheckbox(e: React.MouseEvent) {
+    e.stopPropagation();
     const currentFavorite = isFavorite;
     const newFavorite = !currentFavorite;
 
@@ -448,7 +454,43 @@ function NoteFooter({
     allNotesObject: { setAllNotes },
     openConfirmationWindowObject: { setOpenConfirmationWindow },
     selectedNoteObject: { setSelectedNote },
+    sharedUserIdObject: { sharedUserId },
   } = useGlobalContext();
+
+  async function duplicateNote(e: React.MouseEvent) {
+    e.stopPropagation();
+    try {
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      const { _id, ...noteWithoutId } = note;
+      const newNote = {
+        ...noteWithoutId,
+        title: `${note.title} (Copy)`,
+        creationDate: new Date().toISOString(),
+        clerkUserId: sharedUserId,
+      };
+
+      const response = await fetch('/api/snippets', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(newNote),
+      });
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+
+      const data = await response.json();
+      const duplicatedNote = { ...newNote, _id: data.notes._id };
+
+      setAllNotes((prevNotes) => [duplicatedNote, ...prevNotes]);
+      toast.success('Note duplicated successfully');
+    } catch (error) {
+      console.error('Error duplicating note:', error);
+      toast.error('Failed to duplicate note');
+    }
+  }
 
   async function trashNoteFunction() {
     if (note.isTrash) {
@@ -522,8 +564,6 @@ function NoteFooter({
         )
       );
 
-      // setShowPlaceHolder(false);
-
       toast.success('Note has been restored');
     } catch (error) {
       console.log('Error restoring the note:', error);
@@ -537,14 +577,24 @@ function NoteFooter({
         <span className="truncate">{capitalizeFirstOccurrence(language)}</span>
       </div>
       <div className="flex gap-2 items-center">
+        {!note.isTrash && (
+          <IoDuplicate
+            title="Duplicate note"
+            onClick={duplicateNote}
+            size={17}
+            className="cursor-pointer hover:text-violet-500 flex-shrink-0"
+          />
+        )}
         {note.isTrash && (
           <RestoreFromTrashOutlined
+            titleAccess="Restore note"
             onClick={resetNoteFunction}
             sx={{ fontSize: 19 }}
             className="cursor-pointer flex-shrink-0"
           />
         )}
         <DeleteRounded
+          titleAccess="Delete note"
           sx={{ fontSize: 18 }}
           onClick={trashNoteFunction}
           className={`${
