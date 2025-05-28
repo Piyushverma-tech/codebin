@@ -105,11 +105,11 @@ function TagsWindow() {
   return (
     <>
       {/* Backdrop */}
-      <div 
+      <div
         className="fixed inset-0 bg-black/20 z-30"
         onClick={() => setOpenTagsWindow(false)}
       ></div>
-      
+
       {/* Modal */}
       <div
         className={`${
@@ -133,7 +133,7 @@ function TagsWindow() {
                 darkMode[1].isSelected ? 'text-slate-300' : 'text-gray-900'
               } text-gray-900`}
             >
-             Manage Tags
+              Manage Tags
             </h2>
           </div>
           <button
@@ -146,11 +146,14 @@ function TagsWindow() {
 
         {/* Search and Add */}
         <div className="flex-shrink-0">
-          <SearchBar searchQuery={searchQuery} setSearchQuery={setSearchQuery} />
+          <SearchBar
+            searchQuery={searchQuery}
+            setSearchQuery={setSearchQuery}
+          />
         </div>
 
         {/* Tags List - Fixed scrollable container */}
-        <div className="mt-6 flex-1 min-h-0">
+        <div className="my-6 flex-1 min-h-0">
           <div className="h-full overflow-y-auto scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-transparent hover:scrollbar-thumb-gray-400">
             <div className="pr-2">
               {filterAllItemFromAllTags.length === 0 && (
@@ -167,7 +170,9 @@ function TagsWindow() {
               {filterAllTagsBasedOnSearchQuery.length === 0 &&
                 filterAllItemFromAllTags.length !== 0 && (
                   <EmpthyPlaceHolder
-                    muiIcon={<SearchIcon size={55} className="text-slate-400" />}
+                    muiIcon={
+                      <SearchIcon size={55} className="text-slate-400" />
+                    }
                     text={<span className="text-slate-400">No Tags Found</span>}
                   />
                 )}
@@ -217,7 +222,7 @@ function SearchBar({
           placeholder="Search tags..."
           className={`w-full h-9 pl-10 pr-4 rounded-lg ${
             darkMode[1].isSelected
-              ? ' text-slate-300'
+              ? ' text-slate-300 border border-gray-500'
               : ' border border-gray-200 text-slate-500'
           }  text-sm bg-transparent focus:outline-none focus:ring-2 focus:ring-violet-500 focus:border-transparent transition-all`}
         />
@@ -267,7 +272,7 @@ function SingleTag({ tag }: { tag: SingleTagType }) {
     >
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-4 min-w-0 flex-1">
-          <GripVertical className="h-5 w-5 text-gray-400 cursor-move opacity-0 group-hover:opacity-100 transition-opacity flex-shrink-0" />
+          <GripVertical className="h-5 w-5 text-gray-400 opacity-0 group-hover:opacity-100 transition-opacity flex-shrink-0" />
           <div className="h-2.5 w-2.5 rounded-full bg-violet-500 flex-shrink-0" />
           <div className="min-w-0 flex-1">
             <h3
@@ -313,49 +318,6 @@ function SingleTag({ tag }: { tag: SingleTagType }) {
 }
 
 export default TagsWindow;
-
-// function deleteTag(
-//   tag: SingleTagType,
-//   allTags: SingleTagType[],
-//   setAllTags: React.Dispatch<React.SetStateAction<SingleTagType[]>>,
-//   allNotes: SingleNoteType[],
-//   setAllNotes: React.Dispatch<React.SetStateAction<SingleNoteType[]>>,
-//   tagsClicked: string[],
-//   setTagsClicked: React.Dispatch<React.SetStateAction<string[]>>
-// ) {
-//   setTagsClicked(
-//     tagsClicked.filter(
-//       (t) => t.toLocaleLowerCase() !== tag.name.toLocaleLowerCase()
-//     )
-//   );
-
-//   try {
-//     const updateAllTags = allTags.filter(
-//       (t) => t.name.toLocaleLowerCase() !== tag.name.toLocaleLowerCase()
-//     );
-//     const updateAllNotes = allNotes.map((note) => {
-//       if (
-//         note.tags.some(
-//           (t) => t.name.toLocaleLowerCase() === tag.name.toLocaleLowerCase()
-//         )
-//       ) {
-//         return {
-//           ...note,
-//           tags: note.tags.filter(
-//             (t) => t.name.toLocaleLowerCase() !== tag.name.toLocaleLowerCase()
-//           ),
-//         };
-//       }
-//       return note;
-//     });
-
-//     setAllTags(updateAllTags);
-//     setAllNotes(updateAllNotes);
-//     toast.success('Tag has been deleted');
-//   } catch (error) {
-//     console.log(error);
-//   }
-// }
 
 async function updateNote(note: SingleNoteType, tagToRemove: string) {
   const updatedTags = note.tags.filter(
