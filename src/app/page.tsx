@@ -197,7 +197,7 @@ const Features = () => {
       </div>
 
       <div className="max-w-7xl mx-auto relative">
-        <div className="text-center mb-16">
+        <div className="text-center mb-16 hidden max-sm:block">
           <h2 className="text-3xl lg:text-4xl font-bold text-gray-900 mb-4">
             Everything you need to manage code
           </h2>
@@ -254,6 +254,13 @@ const Features = () => {
                 Convert snippets between programming languages instantly
               </p>
             </div>
+          </div>
+
+          {/* Real-time Editing - Medium */}
+          <div className="md:col-span-2 lg:col-span-2 hidden sm:flex items-center justify-center group relative p-6">
+            <h2 className="text-3xl lg:text-4xl text-center font-bold text-gray-900 mb-4">
+              Everything you need to manage code
+            </h2>
           </div>
 
           {/* Real-time Editing - Medium */}
@@ -475,6 +482,9 @@ const FeedbackForm = () => {
                   </option>
                   <option className="text-lg text-gray-900" value="feature">
                     Feature Request
+                  </option>
+                  <option className="text-lg text-gray-900" value="Bug Report">
+                    Bug Report
                   </option>
                 </select>
               </div>
