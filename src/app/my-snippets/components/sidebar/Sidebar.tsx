@@ -50,7 +50,7 @@ export default function Sidebar() {
 
         {/* Footer */}
         <div
-          className={`mt-auto pt-6 border-t ${
+          className={`pt-2 border-t ${
             darkMode[1].isSelected ? 'border-zinc-800' : 'border-slate-200'
           }`}
         >
@@ -192,7 +192,7 @@ function Languages() {
           >
             Languages
           </div>
-          <div className="space-y-2 px-2">
+          <div className="space-y-2 px-2 h-[260px] overflow-y-auto">
             {codeLanguagesCounter.map((language, index) => (
               <div
                 key={index}
