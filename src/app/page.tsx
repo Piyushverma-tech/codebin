@@ -421,7 +421,7 @@ const FeedbackForm = () => {
         ) : (
           <form
             onSubmit={handleSubmit}
-            className=" bg-gradient-to-br from-indigo-50 to-purple-50 border border-indigo-100/50 rounded-2xl hover:shadow-xl p-8"
+            className=" bg-gradient-to-br from-indigo-50 to-purple-50 border border-indigo-100/50 rounded-lg p-8"
           >
             <div className="grid grid-cols-1 gap-6">
               <div>

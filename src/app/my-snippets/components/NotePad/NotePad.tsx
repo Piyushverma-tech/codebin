@@ -753,7 +753,7 @@ function CodeBlock({
               />
             ) : (
               <ContentCopyOutlined
-                titleAccess='Copy code'
+                titleAccess="Copy code"
                 onClick={() => clickedCopyBtn()}
                 sx={{ fontSize: 20 }}
                 className={`text-slate-400`}
@@ -791,8 +791,8 @@ function CodeBlock({
 
         <AceEditor
           placeholder="// Add your code here..."
-          mode="javascript"
-          theme="tomorrow"
+          mode={singleNote.language.toLowerCase()}
+          theme={`${darkMode[1].isSelected ? 'monokai' : 'tomorrow'}`}
           className={`bg-transparent p-4 mt-2`}
           name="blah2"
           width="100%"

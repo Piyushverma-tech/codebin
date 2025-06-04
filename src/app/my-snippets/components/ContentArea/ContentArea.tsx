@@ -6,9 +6,9 @@ import SearchBar from './TopBar/SearchBar';
 import SidebarMenuIcon from './TopBar/SideBarMenuIcon';
 import SwiperSelection from './NotesArea/SwiperSelection';
 import AllNotesSection from './NotesArea/AllNotesSection';
-import ContentNote from '../ContentNote/ContentNote';
 import TagsWindow from '../TagsWindow/TagsWindow';
 import AddTagWindow from '../TagsWindow/AddTagWindow';
+import ContentNote from '../NotePad/NotePad';
 
 function ContentArea() {
   const {
@@ -68,7 +68,6 @@ function NotesArea() {
         <AllNotesSection />
       </div>
       <ContentNote />
-   
     </div>
   );
 }
