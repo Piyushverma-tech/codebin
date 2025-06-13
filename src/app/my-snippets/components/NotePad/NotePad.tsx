@@ -321,7 +321,6 @@ function NoteTags({
 
   const {
     allNotesObject: { setAllNotes },
-
     isMobileObject: { isMobile },
     isNewNoteObject: { setIsNewNote },
   } = useGlobalContext();
@@ -408,26 +407,33 @@ function NoteTags({
             )
           )}
         </div>
-        {isOpened && <TagsMenu onClickedTag={onClickedTag} />}
+        {isOpened && (
+          <TagsMenu onClickedTag={onClickedTag} setHovered={setHovered} />
+        )}
       </div>
     </div>
   );
 
   function TagsMenu({
     onClickedTag,
+    setHovered,
   }: {
     onClickedTag: (tag: SingleTagType) => void;
+    setHovered: React.Dispatch<React.SetStateAction<boolean>>;
   }) {
     const {
       allTagsObject: { allTags },
       darkModeObject: { darkMode },
     } = useGlobalContext();
 
-    const menuRef = useRef<HTMLUListElement>(null);
+    const menuRef = useRef<HTMLDivElement>(null);
+    const textRef = useRef<HTMLInputElement>(null);
+    const [searchQuery, setSearchQuery] = useState('');
 
     const handleClickOutside = (event: MouseEvent) => {
       if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
         setIsOpened(false);
+        setHovered(false);
       }
     };
 
@@ -439,46 +445,80 @@ function NoteTags({
       };
     }, []);
 
-    const filterAllItemFromAllTags = allTags.filter(
-      (tag) => tag.name !== 'All'
-    );
+    useEffect(() => {
+      textRef.current?.focus();
+    }, []);
+
+    const AllItemFromAllTags = allTags.filter((tag) => tag.name !== 'All');
+    //filtering
+    const [filteredTags, setFilteredTags] = useState(AllItemFromAllTags);
+
+    const onChangeSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
+      setSearchQuery(event.target.value.toLowerCase());
+    };
+
+    useEffect(() => {
+      const filteredTags = AllItemFromAllTags.filter((tags) => {
+        return tags.name.toLowerCase().includes(searchQuery);
+      });
+      setFilteredTags(filteredTags);
+    }, [searchQuery]);
 
     return (
-      <ul
+      <div
         ref={menuRef}
         className={`${
-          darkMode[1].isSelected ? 'bg-neutral-900' : 'bg-violet-100'
-        } absolute top-10  shadow-lg w-[200px] p-3 rounded-md flex flex-col gap-2 z-50 h-48 overflow-y-auto`}
+          darkMode[1].isSelected
+            ? 'bg-neutral-900 border-gray-500'
+            : 'bg-violet-100 text-slate-400'
+        } absolute top-10 shadow-lg w-[200px] p-3 rounded-md flex flex-col gap-2 z-50 border`}
       >
-        {filterAllItemFromAllTags.length === 0 && (
-          <span className="text-slate-400 text-center">
-            Currently you dont have any tags, Add tags to use them.
-          </span>
-        )}
-        {filterAllItemFromAllTags.map((tag, index) => (
-          <li
-            key={tag._id || index || tag.name}
-            onClick={() => onClickedTag(tag)}
-            className={`${
-              singleNote.tags.some(
-                (t) => t.name.toLowerCase() === tag.name.toLowerCase()
-              )
-                ? `${
-                    darkMode[1].isSelected
-                      ? 'bg-neutral-800'
-                      : 'bg-violet-200/70'
-                  }`
-                : ''
-            } p-1 px-2 select-none cursor-pointer  ${
-              darkMode[1].isSelected
-                ? 'text-slate-100 hover:bg-neutral-700'
-                : 'text-slate-900 hover:bg-violet-200'
-            } rounded-md text-[12px] transition-all`}
-          >
-            {tag.name}
-          </li>
-        ))}
-      </ul>
+        <div className={`p-1 rounded-md flex gap-1 mb-1`}>
+          <SearchIcon className="h-4 w-4" />
+          <input
+            ref={textRef}
+            placeholder="Search..."
+            className={`bg-transparent outline-none w-full`}
+            onChange={onChangeSearch}
+            value={searchQuery}
+          />
+        </div>
+
+        <div
+          className={`${
+            darkMode[1].isSelected ? 'bg-neutral-900' : 'bg-violet-100'
+          } h-40 overflow-y-auto`}
+        >
+          {AllItemFromAllTags.length === 0 && (
+            <span className="text-slate-400 text-center block py-2">
+              Currently you don&apos;t have any tags, Add tags to use them.
+            </span>
+          )}
+          {filteredTags.map((tag, index) => (
+            <div
+              key={tag._id || index || tag.name}
+              onClick={() => onClickedTag(tag)}
+              className={`${
+                singleNote.tags.some(
+                  (t) => t.name.toLowerCase() === tag.name.toLowerCase()
+                )
+                  ? `${
+                      darkMode[1].isSelected
+                        ? 'bg-neutral-700'
+                        : 'bg-violet-200'
+                    }`
+                  : ''
+              } flex mb-2 gap-2 p-[6px] px-3 select-none cursor-pointer ${
+                darkMode[1].isSelected
+                  ? 'text-slate-300 hover:bg-neutral-700'
+                  : 'text-slate-500 hover:bg-slate-300'
+              } rounded-md text-[12px] transition-all`}
+            >
+              {tag.name}
+            </div>
+          ))}
+        </div>
+      </div>
     );
   }
 }
@@ -791,7 +831,7 @@ function CodeBlock({
 
         <AceEditor
           placeholder="// Add your code here..."
-          mode={singleNote.language.toLowerCase() || 'javascript'}
+          mode={selectedLanguage?.name.toLowerCase() || 'javascript'}
           theme={`${darkMode[1].isSelected ? 'monokai' : 'tomorrow'}`}
           className={`bg-transparent p-4 mt-2`}
           name="blah2"
@@ -936,7 +976,7 @@ function CodeBlock({
         ref={menuRef}
         className={`${
           darkMode[1].isSelected
-            ? 'bg-neutral-900'
+            ? 'bg-neutral-900 border-gray-500'
             : 'bg-violet-100  text-slate-400'
         } absolute flex-col gap-2 p-3 w-[200px] rounded-md left-3 border shadow-lg z-50 flex`}
       >
