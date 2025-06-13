@@ -791,7 +791,7 @@ function CodeBlock({
 
         <AceEditor
           placeholder="// Add your code here..."
-          mode={singleNote.language.toLowerCase()}
+          mode={singleNote.language.toLowerCase() || 'javascript'}
           theme={`${darkMode[1].isSelected ? 'monokai' : 'tomorrow'}`}
           className={`bg-transparent p-4 mt-2`}
           name="blah2"
