@@ -235,7 +235,7 @@ function SingleNote({ note, id }: { note: SingleNoteType; id: string }) {
       } rounded-lg  h-[400px]`}
       onClick={() => setSelectedNote(note)}
     >
-      <div className="h-24 p-4 mb-4">
+      <div className="h-24 px-4 py-2 mb-4">
         <NoteHeader
           title={title}
           isFavorite={isFavorite}
@@ -245,7 +245,7 @@ function SingleNote({ note, id }: { note: SingleNoteType; id: string }) {
         <NoteDate creationDate={creationDate} />
         <NoteTags tags={tags} />
       </div>
-      <div className="h-10 px-4">
+      <div className="h-10 mb-1 px-4">
         <NoteDescription description={description} />
       </div>
 
@@ -253,7 +253,7 @@ function SingleNote({ note, id }: { note: SingleNoteType; id: string }) {
         <NoteCodeBlock language={language} code={code} />
       </div>
 
-      <div className="h-12 flex items-center p-4">
+      <div className="h-11 flex items-center p-4">
         <NoteFooter language={language} note={note} />
       </div>
     </div>
@@ -331,8 +331,8 @@ function NoteHeader({
 
   return (
     <div
-      className={`flex justify-between cursor-pointer ${
-        !isTrashed && 'hover:text-violet-500 '
+      className={`flex justify-between items-center  ${
+        !isTrashed ? 'hover:text-violet-500 cursor-pointer' : 'mb-2'
       } ${darkMode[1].isSelected ? 'text-neutral-300' : 'text-slate-600 '}`}
       onClick={() => clickedNoteTitle()}
     >
