@@ -34,9 +34,24 @@ const SignInPage = () => {
       </svg>
     </div>
   );
+
+  const DemoCredentialsBox = () => (
+    <div className="absolute top-6 left-6 z-10 p-4 bg-white/90 backdrop-blur-sm border border-gray-200 rounded-lg shadow-md">
+      <div className="text-base text-gray-600 mb-2">Demo credentials:</div>
+      <div className="text-sm text-gray-800 space-y-1">
+        <div>
+          <span className="font-medium">Email:</span> project.demo.acc@gmail.com
+        </div>
+        <div>
+          <span className="font-medium">Password:</span> codebin.demo
+        </div>
+      </div>
+    </div>
+  );
   return (
     <div className={`w-full h-screen flex justify-center items-center`}>
       <TechGrid />
+      <DemoCredentialsBox />
       <SignIn />
     </div>
   );
