@@ -17,7 +17,13 @@ import {
 } from '@mui/icons-material';
 import CloseOutlined from '@mui/icons-material/CloseOutlined';
 import { IconButton } from '@mui/material';
-import React, { useEffect, useMemo, useRef, useState } from 'react';
+import React, {
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+  useCallback,
+} from 'react';
 import { toast } from 'react-hot-toast';
 
 import AceEditor from 'react-ace';
@@ -64,7 +70,6 @@ export async function saveNoteInDB(
       //
     }
 
-    // Ensure all required fields are present
     const bodyData = {
       ...noteData,
       title: noteData.title || '',
@@ -78,7 +83,6 @@ export async function saveNoteInDB(
       creationDate: noteData.creationDate || new Date().toISOString(),
     };
 
-    // Validate required fields
     if (!bodyData.clerkUserId) {
       throw new Error('User ID is required');
     }
@@ -124,7 +128,7 @@ export async function saveNoteInDB(
     }
   } catch (error) {
     console.error('Error saving note:', error);
-    throw error; // Re-throw the error to be handled by the caller
+    throw error; // Rethrow the error
   }
 }
 
@@ -142,20 +146,17 @@ function ContentNote() {
     undefined
   );
   const [saveError, setSaveError] = useState<string | null>(null);
+  const [hasInitialSave, setHasInitialSave] = useState(false);
 
   useEffect(() => {
     if (openContentNote && selectedNote) {
       setSingleNote(selectedNote);
+      setHasInitialSave(!!selectedNote._id); // If note has _id, it's already saved
     }
   }, [openContentNote, selectedNote]);
 
-  useEffect(() => {
-    if (isNewNote && singleNote && singleNote.title.trim() !== '') {
-      debouncedSavedNote(singleNote, isNewNote);
-    }
-  }, [singleNote]);
-
-  const debouncedSavedNote = useMemo(
+  // Debounced save function for subsequent changes
+  const debouncedSave = useMemo(
     () =>
       debounce(async (note: SingleNoteType, isNew: boolean) => {
         try {
@@ -173,9 +174,52 @@ function ContentNote() {
             error instanceof Error ? error.message : 'Failed to save note'
           );
         }
-      }, 500),
-    []
+      }, 1000),
+    [setAllNotes, setSingleNote, setIsNewNote]
   );
+
+  // Immediate save function for first keystroke
+  const immediateSave = useCallback(
+    async (note: SingleNoteType, isNew: boolean) => {
+      try {
+        await saveNoteInDB(
+          note,
+          isNew,
+          setAllNotes,
+          setSingleNote,
+          setIsNewNote
+        );
+        setHasInitialSave(true);
+        setSaveError(null);
+      } catch (error) {
+        console.error('Error in immediate save:', error);
+        setSaveError(
+          error instanceof Error ? error.message : 'Failed to save note'
+        );
+      }
+    },
+    [setAllNotes, setSingleNote, setIsNewNote]
+  );
+
+  // this decides between immediate and debounced save
+  const smartSave = useCallback(
+    (note: SingleNoteType, isNew: boolean) => {
+      if (!hasInitialSave) {
+        // First save - do it immediately
+        immediateSave(note, isNew);
+      } else {
+        // else use debounced
+        debouncedSave(note, isNew);
+      }
+    },
+    [hasInitialSave, immediateSave, debouncedSave]
+  );
+
+  useEffect(() => {
+    return () => {
+      debouncedSave.cancel();
+    };
+  }, [debouncedSave]);
 
   return (
     <div
@@ -199,10 +243,24 @@ function ContentNote() {
           <ContentNoteHeader
             singleNote={singleNote}
             setSingleNote={setSingleNote}
+            smartSave={smartSave}
+            isNewNote={isNewNote}
           />
-          <NoteTags singleNote={singleNote} setSingleNote={setSingleNote} />
-          <Description singleNote={singleNote} setSingleNote={setSingleNote} />
-          <CodeBlock singleNote={singleNote} setSingleNote={setSingleNote} />
+          <NoteTags
+            singleNote={singleNote}
+            setSingleNote={setSingleNote}
+            smartSave={smartSave}
+          />
+          <Description
+            singleNote={singleNote}
+            setSingleNote={setSingleNote}
+            smartSave={smartSave}
+          />
+          <CodeBlock
+            singleNote={singleNote}
+            setSingleNote={setSingleNote}
+            smartSave={smartSave}
+          />
         </div>
       )}
     </div>
@@ -214,11 +272,15 @@ export default ContentNote;
 function ContentNoteHeader({
   singleNote,
   setSingleNote,
+  smartSave,
+  isNewNote,
 }: {
   singleNote: SingleNoteType;
   setSingleNote: React.Dispatch<
     React.SetStateAction<SingleNoteType | undefined>
   >;
+  smartSave: (note: SingleNoteType, isNew: boolean) => void;
+  isNewNote: boolean;
 }) {
   const {
     openContentNoteObject: { openContentNote, setOpenContentNote },
@@ -228,32 +290,24 @@ function ContentNoteHeader({
   } = useGlobalContext();
 
   const textRef = useRef<HTMLTextAreaElement>(null);
-  const [onFocus, setOnFocus] = useState(false);
-  if (onFocus) {
-  }
 
   function onUpdateTitle(event: React.ChangeEvent<HTMLTextAreaElement>) {
     const newSingleNote = { ...singleNote, title: event.target.value };
     setSingleNote(newSingleNote);
+
+    // Update global state immediately for real-time preview
     setAllNotes((prevNotes) =>
       prevNotes.map((note) =>
         note._id === singleNote._id ? newSingleNote : note
       )
     );
 
-    if (!singleNote.title.trim()) {
+    if (!newSingleNote.title.trim()) {
       console.log('Title is empty, not creating a note');
       return;
     }
 
-    //Calling saveNoteInDB immediately after updating state
-    saveNoteInDB(
-      newSingleNote,
-      false,
-      setAllNotes,
-      setSingleNote,
-      setIsNewNote
-    );
+    smartSave(newSingleNote, isNewNote);
   }
 
   function handleKeyDown(event: React.KeyboardEvent<HTMLTextAreaElement>) {
@@ -265,15 +319,8 @@ function ContentNoteHeader({
   useEffect(() => {
     if (openContentNote) {
       textRef.current?.focus();
-      setOnFocus(true);
     }
   }, [openContentNote]);
-
-  useEffect(() => {
-    if (singleNote.title !== '') {
-      setOnFocus(true);
-    }
-  }, [singleNote.title]);
 
   return (
     <div className="flex justify-between p-2 gap-8  mt-4">
@@ -284,10 +331,10 @@ function ContentNoteHeader({
           onKeyDown={handleKeyDown}
           placeholder="Add Title..."
           onChange={onUpdateTitle}
-          onBlur={() => setOnFocus(false)}
-          onFocus={() => setOnFocus(true)}
-          onMouseEnter={() => setOnFocus(true)}
-          onMouseLeave={() => setOnFocus(false)}
+          onBlur={() => {}}
+          onFocus={() => {}}
+          onMouseEnter={() => {}}
+          onMouseLeave={() => {}}
           className={`${
             darkMode[1].isSelected
               ? ' bg-transparent text-neutral-300'
@@ -310,11 +357,13 @@ function ContentNoteHeader({
 function NoteTags({
   singleNote,
   setSingleNote,
+  smartSave,
 }: {
   singleNote: SingleNoteType;
   setSingleNote: React.Dispatch<
     React.SetStateAction<SingleNoteType | undefined>
   >;
+  smartSave: (note: SingleNoteType, isNew: boolean) => void;
 }) {
   const [hovered, setHovered] = useState(false);
   const [isOpened, setIsOpened] = useState(false);
@@ -322,7 +371,7 @@ function NoteTags({
   const {
     allNotesObject: { setAllNotes },
     isMobileObject: { isMobile },
-    isNewNoteObject: { setIsNewNote },
+    isNewNoteObject: { isNewNote },
   } = useGlobalContext();
 
   useEffect(() => {
@@ -332,7 +381,6 @@ function NoteTags({
   }, [isOpened]);
 
   function onClickedTag(tag: SingleTagType) {
-    // Toggle the presence of this tag in singleNote.tags:
     const newTags = singleNote.tags.some(
       (t) => t.name.toLowerCase() === tag.name.toLowerCase()
     )
@@ -346,21 +394,14 @@ function NoteTags({
     // Updating the local state of the note
     setSingleNote(newSingleNote);
 
-    // Updating the global state of notes
+    // Updating the global state of notes for real-time preview
     setAllNotes((prevNotes) =>
       prevNotes.map((note) =>
         note._id === singleNote._id ? newSingleNote : note
       )
     );
 
-    // Save the note update
-    saveNoteInDB(
-      newSingleNote,
-      false,
-      setAllNotes,
-      setSingleNote,
-      setIsNewNote
-    );
+    smartSave(newSingleNote, isNewNote);
   }
 
   return (
@@ -526,17 +567,19 @@ function NoteTags({
 function Description({
   singleNote,
   setSingleNote,
+  smartSave,
 }: {
   singleNote: SingleNoteType;
   setSingleNote: React.Dispatch<
     React.SetStateAction<SingleNoteType | undefined>
   >;
+  smartSave: (note: SingleNoteType, isNew: boolean) => void;
 }) {
   const {
     allNotesObject: { setAllNotes },
     darkModeObject: { darkMode },
     isMobileObject: { isMobile },
-    isNewNoteObject: { setIsNewNote },
+    isNewNoteObject: { isNewNote },
   } = useGlobalContext();
 
   const [isHoverd, setIsHoverd] = useState(false);
@@ -550,13 +593,7 @@ function Description({
       )
     );
 
-    saveNoteInDB(
-      newSingleNote,
-      false,
-      setAllNotes,
-      setSingleNote,
-      setIsNewNote
-    );
+    smartSave(newSingleNote, isNewNote);
   }
 
   return (
@@ -591,11 +628,13 @@ function Description({
 function CodeBlock({
   singleNote,
   setSingleNote,
+  smartSave,
 }: {
   singleNote: SingleNoteType;
   setSingleNote: React.Dispatch<
     React.SetStateAction<SingleNoteType | undefined>
   >;
+  smartSave: (note: SingleNoteType, isNew: boolean) => void;
 }) {
   const [isHoverd, setIsHoverd] = useState(false);
   const [isOpened, setIsOpened] = useState(false);
@@ -608,7 +647,7 @@ function CodeBlock({
     selectedLanguageObject: { selectedLanguage, setSelectedLanguage },
     selectedNoteObject: { selectedNote },
     allNotesObject: { setAllNotes },
-    isNewNoteObject: { setIsNewNote },
+    isNewNoteObject: { isNewNote, setIsNewNote },
     darkModeObject: { darkMode },
     isMobileObject: { isMobile },
   } = useGlobalContext();
@@ -640,13 +679,7 @@ function CodeBlock({
       )
     );
 
-    saveNoteInDB(
-      newSingleNote,
-      false,
-      setAllNotes,
-      setSingleNote,
-      setIsNewNote
-    );
+    smartSave(newSingleNote, isNewNote);
   }
 
   function clickedCopyBtn() {
@@ -938,33 +971,8 @@ function CodeBlock({
               note._id === singleNote._id ? newSingleNote : note
             )
           );
-          saveNoteInDB(
-            newSingleNote,
-            false,
-            setAllNotes,
-            setSingleNote,
-            setIsNewNote
-          );
+          smartSave(newSingleNote, false);
         }
-      } else {
-        // Just update the language without converting code
-        const newSingleNote: SingleNoteType = {
-          ...singleNote,
-          language: language.name,
-        };
-        setSingleNote(newSingleNote);
-        setAllNotes((prevNotes) =>
-          prevNotes.map((note) =>
-            note._id === singleNote._id ? newSingleNote : note
-          )
-        );
-        saveNoteInDB(
-          newSingleNote,
-          false,
-          setAllNotes,
-          setSingleNote,
-          setIsNewNote
-        );
       }
 
       setSelectedLanguage(language);
