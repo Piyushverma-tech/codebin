@@ -16,7 +16,7 @@ import { Logo } from './my-snippets/components/Logo/Logo';
 
 const Home = () => {
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-blue-50">
+    <div className="min-h-screen bg-gradient-to-br from-slate-200 via-white to-blue-50">
       <Navbar />
       <Hero />
       <Features />
@@ -181,6 +181,31 @@ const Hero = () => {
               <div className="absolute bottom-2 left-6 right-6 sm:left-8 sm:right-8 h-px bg-gradient-to-r from-transparent via-gray-400 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
             </button>
           </Link>
+        </div>
+      </div>
+      {/* Dashboard Video Section */}
+      <div className="relative w-full scale-75 mx-auto">
+        <div className="relative group">
+          {/* Video container with modern border and effects */}
+          <div className="relative bg-white/10 backdrop-blur-sm rounded-2xl sm:rounded-3xl border border-white/20 shadow-2xl overflow-hidden transform transition-all duration-500 hover:scale-[1.02] hover:shadow-3xl">
+            {/* Video element */}
+            <div className="relative overflow-hidden bg-gradient-to-br from-gray-50 to-gray-100">
+              <video
+                className="w-full h-auto max-w-full transition-all duration-300 hover:scale-105"
+                autoPlay
+                muted
+                loop
+                playsInline
+                poster="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 800 450'%3E%3Crect width='800' height='450' fill='%23f8fafc'/%3E%3Ctext x='400' y='225' text-anchor='middle' fill='%236b7280' font-size='20' font-family='sans-serif'%3ELoading Codebin Dashboard...%3C/text%3E%3C/svg%3E"
+              >
+                <source
+                  src="https://res.cloudinary.com/dsrmecb5y/video/upload/v1749838244/Codebin_tngddk.mp4"
+                  type="video/mp4"
+                />
+                Your browser does not support the video tag.
+              </video>
+            </div>
+          </div>
         </div>
       </div>
     </div>
