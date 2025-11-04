@@ -39,7 +39,9 @@ export async function POST(request: Request) {
       "title": "A clear, concise title for this code snippet (max 50 chars)",
       "description": "A brief explanation of what the code does (max 200 chars)",
       "code": "The actual code implementation",
-      "suggestedTags": ["tag1", "tag2", "tag3"] // Only 3 tags: 1st - code language, 2nd - main functionality, 3rd - category/topic
+      "suggestedTags": ["tag1", "tag2", "tag3"], // Only 3 tags: 1st - code language, 2nd - main functionality, 3rd - category/topic
+      "timeComplexity": "Big-O time complexity such as O(n), O(n log n)",
+      "optimizationPercent": 0
     }
     
     The code should be in user's preferred language, if not provided then default to "${language}".
@@ -49,9 +51,9 @@ export async function POST(request: Request) {
     1. The programming language (e.g., "Python", "JavaScript"),
     2. The core functionality (e.g., "validation", "API", "sorting"),
     3. A broader category or context (e.g., "backend", "frontend", "data-processing").
+    The "optimizationPercent" should be an integer from 0 to 100 estimating how optimized the solution is compared to a naive baseline for the same task.
     Provide only the JSON response, no additional text or markdown.`;
 
-    // Configure the model with safety settings
     const model = genAI.getGenerativeModel({
       model: 'gemini-2.0-flash',
       safetySettings: [
@@ -110,6 +112,11 @@ export async function POST(request: Request) {
             description: parsedResponse.description,
             code: parsedResponse.code.trim(),
             suggestedTags: parsedResponse.suggestedTags || [],
+            timeComplexity: parsedResponse.timeComplexity || '',
+            optimizationPercent:
+              typeof parsedResponse.optimizationPercent === 'number'
+                ? parsedResponse.optimizationPercent
+                : undefined,
           });
         } catch (parseError) {
           console.error('Error parsing AI response:', parseError);

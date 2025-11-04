@@ -70,11 +70,27 @@ export async function saveNoteInDB(
       //
     }
 
-    const bodyData = {
+    const bodyData: Partial<SingleNoteType> & {
+      title: string;
+      description: string;
+      code: string;
+      language: string;
+      clerkUserId: string;
+      tags: SingleTagType[];
+      isFavorite: boolean;
+      isTrash: boolean;
+      creationDate: string;
+    } = {
       ...noteData,
       title: noteData.title || '',
       description: noteData.description || '',
       code: noteData.code || '',
+      timeComplexity: noteData.timeComplexity
+        ? noteData.timeComplexity
+        : undefined,
+      optimizationPercent: noteData.optimizationPercent
+        ? noteData.optimizationPercent
+        : undefined,
       language: noteData.language || 'Javascript',
       clerkUserId: noteData.clerkUserId,
       tags: noteData.tags || [],
@@ -128,7 +144,7 @@ export async function saveNoteInDB(
     }
   } catch (error) {
     console.error('Error saving note:', error);
-    throw error; // Rethrow the error
+    throw error;
   }
 }
 
@@ -231,7 +247,7 @@ function ContentNote() {
         darkMode[1].isSelected
           ? 'bg-zinc-900 text-white'
           : 'bg-gray-50 text-slate-900'
-      } p-3 rounded-lg  ${openContentNote ? 'block' : 'hidden'} h-[740px]`}
+      } px-3 rounded-lg  ${openContentNote ? 'block' : 'hidden'} h-[690px]`}
     >
       {singleNote && (
         <div>
@@ -295,7 +311,7 @@ function ContentNoteHeader({
     const newSingleNote = { ...singleNote, title: event.target.value };
     setSingleNote(newSingleNote);
 
-    // Update global state immediately for real-time preview
+    // Updating global state immediately for real-time preview
     setAllNotes((prevNotes) =>
       prevNotes.map((note) =>
         note._id === singleNote._id ? newSingleNote : note
@@ -323,8 +339,8 @@ function ContentNoteHeader({
   }, [openContentNote]);
 
   return (
-    <div className="flex justify-between p-2 gap-8  mt-4">
-      <div className="flex gap-4 w-full mt-2 items-center">
+    <div className="flex justify-between p-2 gap-8  mt-2">
+      <div className="flex gap-4 w-full my-2 items-center">
         <textarea
           ref={textRef}
           value={singleNote.title || ''}
@@ -339,7 +355,7 @@ function ContentNoteHeader({
             darkMode[1].isSelected
               ? ' bg-transparent text-neutral-300'
               : ' bg-gray-50 text-slate-500 '
-          } font-bold text-[24px] sm:text-center sm:ml-4 outline-none  h-18 overflow-y-auto resize-none  overflow-hidden w-full`}
+          } font-bold text-[24px]  sm:ml-8 outline-none  h-10 overflow-y-auto resize-none  overflow-hidden w-full`}
         />
       </div>
       <CloseOutlined
@@ -405,7 +421,7 @@ function NoteTags({
   }
 
   return (
-    <div className="flex text-[13px] items-center p-2 gap-2  ">
+    <div className="flex text-[13px] items-center px-2 gap-2">
       {!isMobile && (
         <TagsIcon
           size={26}
@@ -424,7 +440,7 @@ function NoteTags({
             singleNote.tags.map((tag, index) => (
               <div
                 key={tag._id || tag.name || index}
-                className=" border-2 bg-gray-200 text-violet-600 shadow-sm  p-1 px-2 rounded-md "
+                className=" border-2 bg-gray-200 text-violet-600 shadow-sm  py-[1.5px] px-2 rounded-md "
               >
                 {tag.name}
               </div>
@@ -597,7 +613,7 @@ function Description({
   }
 
   return (
-    <div className="flex gap-2 text-[13px] mt-4 p-2">
+    <div className="flex gap-2 text-[13px] mt-2 p-2">
       {!isMobile && (
         <DescriptionOutlined
           sx={{ fontSize: 24 }}
@@ -619,7 +635,7 @@ function Description({
           darkMode[1].isSelected ? ' text-slate-200' : ' text-slate-800'
         } text-sm  outline-none border w-full   ${
           isHoverd ? 'border-violet-500' : 'border-slate-400'
-        } rounded-lg p-2 h-20 resize-none`}
+        } rounded-lg p-2 h-24 resize-none`}
       />
     </div>
   );
@@ -642,6 +658,7 @@ function CodeBlock({
   const [isAIModalOpen, setIsAIModalOpen] = useState(false);
   const [isModifyModalOpen, setIsModifyModalOpen] = useState(false);
   const [isConverting, setIsConverting] = useState(false);
+  const [isAnalyzing, setIsAnalyzing] = useState(false);
 
   const {
     selectedLanguageObject: { selectedLanguage, setSelectedLanguage },
@@ -698,6 +715,8 @@ function CodeBlock({
         title: generatedNote.title || '',
         description: generatedNote.description || '',
         code: generatedNote.code || '',
+        timeComplexity: generatedNote.timeComplexity || '',
+        optimizationPercent: generatedNote.optimizationPercent,
         language: generatedNote.language || 'Javascript',
         creationDate: new Date().toISOString(),
         tags: generatedNote.tags || [],
@@ -781,8 +800,51 @@ function CodeBlock({
     }
   }
 
+  async function analyzeCurrentCode() {
+    if (!singleNote.code.trim()) return;
+    setIsAnalyzing(true);
+    try {
+      const response = await fetch('/api/analyze-code', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          code: singleNote.code,
+          language: singleNote.language,
+        }),
+      });
+      const data = await response.json();
+      if (!response.ok || data.error) {
+        throw new Error(data.error || 'Failed to analyze code');
+      }
+      const updatedNote: SingleNoteType = {
+        ...singleNote,
+        timeComplexity: data.timeComplexity || '',
+        optimizationPercent:
+          typeof data.optimizationPercent === 'number'
+            ? data.optimizationPercent
+            : undefined,
+      };
+      setSingleNote(updatedNote);
+      setAllNotes((prev) =>
+        prev.map((n) => (n._id === singleNote._id ? updatedNote : n))
+      );
+      await saveNoteInDB(
+        updatedNote,
+        false,
+        setAllNotes,
+        setSingleNote,
+        setIsNewNote
+      );
+    } catch (e) {
+      console.error('Error analyzing code:', e);
+      toast.error('Failed to analyze code. Please try again.');
+    } finally {
+      setIsAnalyzing(false);
+    }
+  }
+
   return (
-    <div className="flex gap-2 text-[12px] p-2 text-slate-400 mt-4">
+    <div className="flex gap-2 text-[12px] px-2 text-slate-400 mt-2">
       {!isMobile && (
         <CodeOutlined
           sx={{ fontSize: 22 }}
@@ -886,6 +948,52 @@ function CodeBlock({
             tabSize: 2,
           }}
         />
+
+        {/* Complexity & Optimization */}
+        <div className="mt-3 flex items-center justify-between text-xs">
+          <div
+            className={`${
+              darkMode[1].isSelected ? 'text-slate-300' : 'text-slate-600'
+            } flex gap-4`}
+          >
+            <span>
+              <span
+                className={`${
+                  darkMode[1].isSelected ? 'text-slate-400' : 'text-slate-500'
+                }`}
+              >
+                Time Complexity:
+              </span>
+              <span className="ml-1">{singleNote.timeComplexity || '—'}</span>
+            </span>
+            <span>
+              <span
+                className={`${
+                  darkMode[1].isSelected ? 'text-slate-400' : 'text-slate-500'
+                }`}
+              >
+                Optimization:
+              </span>
+              <span className="ml-1">
+                {typeof singleNote.optimizationPercent === 'number'
+                  ? `${singleNote.optimizationPercent}%`
+                  : '—'}
+              </span>
+            </span>
+          </div>
+          <button
+            onClick={analyzeCurrentCode}
+            disabled={isAnalyzing || !singleNote.code.trim()}
+            className={`${
+              isAnalyzing || !singleNote.code.trim()
+                ? 'bg-violet-300 cursor-not-allowed'
+                : 'bg-violet-500 hover:bg-violet-600'
+            } text-white px-3 py-1 rounded`}
+            title="Generate time complexity and optimization percentage"
+          >
+            {isAnalyzing ? 'Analyzing…' : 'Analyze Complexity'}
+          </button>
+        </div>
 
         <AICodeGenerator
           isOpen={isAIModalOpen}

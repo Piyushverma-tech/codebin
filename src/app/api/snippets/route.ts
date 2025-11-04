@@ -13,6 +13,8 @@ export async function POST(req: Request) {
       tags = [],
       description = '',
       code = '',
+      timeComplexity = '',
+      optimizationPercent,
       language = '',
       creationDate = new Date().toISOString(),
     } = await req.json();
@@ -34,6 +36,8 @@ export async function POST(req: Request) {
       tags,
       description,
       code,
+      timeComplexity,
+      optimizationPercent,
       language,
       creationDate,
     });

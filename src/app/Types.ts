@@ -26,6 +26,8 @@ export interface SingleNoteType {
   tags: SingleTagType[];
   description: string;
   code: string;
+  timeComplexity?: string;
+  optimizationPercent?: number;
   language: string;
   creationDate: string;
 }

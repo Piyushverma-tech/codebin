@@ -42,12 +42,20 @@ const SingleSnippetSchema = new Schema(
       type: String,
       default: '',
     },
+    timeComplexity: {
+      type: String,
+      default: '',
+    },
+    optimizationPercent: {
+      type: Number,
+      default: undefined,
+    },
     language: {
       type: String,
       default: '',
     },
     creationDate: {
-      type: Date, // Using Date for better handling of date operations
+      type: Date,
       required: true,
       default: Date.now,
     },
@@ -58,7 +66,7 @@ const SingleSnippetSchema = new Schema(
     },
   },
   {
-    timestamps: true, // Automatically add createdAt and updatedAt fields
+    timestamps: true,
   }
 );
 

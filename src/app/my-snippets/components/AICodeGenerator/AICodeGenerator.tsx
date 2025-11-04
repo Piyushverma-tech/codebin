@@ -29,7 +29,7 @@ export default function AICodeGenerator({
   const findMatchingLanguage = (detectedLanguage: string): string => {
     const normalizedDetectedLang = detectedLanguage.toLowerCase();
     const matchedLanguage = programmingLanguages.find(
-      lang => lang.name.toLowerCase() === normalizedDetectedLang
+      (lang) => lang.name.toLowerCase() === normalizedDetectedLang
     );
     return matchedLanguage?.name || selectedLanguage;
   };
@@ -65,8 +65,6 @@ export default function AICodeGenerator({
       if (!data.code || !data.title || !data.description) {
         throw new Error('Incomplete code generation response');
       }
-
-      console.log('AI Response:', data); // Debug log
 
       // Create any suggested tags that don't exist yet
       let noteTags: SingleTagType[] = [];
@@ -126,12 +124,19 @@ export default function AICodeGenerator({
         title: data.title,
         description: data.description,
         code: data.code,
-        language: data.suggestedTags?.[0] ? findMatchingLanguage(data.suggestedTags[0]) : selectedLanguage,
+        language: data.suggestedTags?.[0]
+          ? findMatchingLanguage(data.suggestedTags[0])
+          : selectedLanguage,
         creationDate: new Date().toISOString(),
         tags: noteTags,
         clerkUserId: sharedUserId,
         isFavorite: false,
         isTrash: false,
+        timeComplexity: data.timeComplexity || '',
+        optimizationPercent:
+          typeof data.optimizationPercent === 'number'
+            ? data.optimizationPercent
+            : undefined,
       };
 
       onCodeGenerated(noteData);
