@@ -39,7 +39,7 @@ body {
 }
 
 ::-webkit-scrollbar {
-  width: 4px;
+  width: 5px;
   height: 4px;
 }
 
@@ -49,11 +49,11 @@ body {
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background-color: #aaa;
+  background-color: #969696;
 }
 
 ::-webkit-scrollbar-track {
-  background-color: #fff;
+  background-color: #ffffff00;
 }
 
 .content-note-modal-wrapper {

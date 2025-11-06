@@ -87,7 +87,6 @@ function QuickLinks() {
     openSideBarObject: { setOpenSideBar },
     tagsMenuObject: { tagsMenu },
     openTagsWindowObject: { setOpenTagsWindow },
-    openContentNoteObject: { setOpenContentNote },
     darkModeObject: { darkMode },
   } = useGlobalContext();
 
@@ -139,7 +138,7 @@ function QuickLinks() {
             key={index}
             onClick={() => {
               setOpenTagsWindow(true);
-              setOpenContentNote(false);
+
               setOpenSideBar(false);
             }}
             className={`flex cursor-pointer select-none gap-3 items-center px-3 py-2.5 rounded-lg

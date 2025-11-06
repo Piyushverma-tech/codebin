@@ -241,13 +241,13 @@ function ContentNote() {
     <div
       className={` ${
         isMobile
-          ? 'fixed left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-full py-6  z-50'
-          : 'w-1/2'
+          ? 'fixed left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-full py-6 z-50'
+          : 'w-[45%] fixed right-0'
       } ${
         darkMode[1].isSelected
           ? 'bg-zinc-900 text-white'
           : 'bg-gray-50 text-slate-900'
-      } px-3 rounded-lg  ${openContentNote ? 'block' : 'hidden'} h-[690px]`}
+      } px-3 rounded-lg  ${openContentNote ? 'block' : 'hidden'} h-[700px]`}
     >
       {singleNote && (
         <div>
@@ -355,7 +355,7 @@ function ContentNoteHeader({
             darkMode[1].isSelected
               ? ' bg-transparent text-neutral-300'
               : ' bg-gray-50 text-slate-500 '
-          } font-bold text-[24px]  sm:ml-8 outline-none  h-10 overflow-y-auto resize-none  overflow-hidden w-full`}
+          } font-bold text-[24px] sm:text-center sm:ml-8 outline-none  h-10 overflow-y-auto resize-none  overflow-hidden w-full`}
         />
       </div>
       <CloseOutlined
@@ -528,7 +528,7 @@ function NoteTags({
           darkMode[1].isSelected
             ? 'bg-neutral-900 border-gray-500'
             : 'bg-violet-100 text-slate-400'
-        } absolute top-10 shadow-lg w-[200px] p-3 rounded-md flex flex-col gap-2 z-50 border`}
+        } absolute top-10 shadow-lg w-[250px] p-3 rounded-md flex flex-col gap-2 z-50 border`}
       >
         <div className={`p-1 rounded-md flex gap-1 mb-1`}>
           <SearchIcon className="h-4 w-4" />
@@ -858,7 +858,7 @@ function CodeBlock({
         onMouseLeave={() => setIsHoverd(false)}
         className={`${
           isHoverd ? 'border-violet-500' : 'border-slate-400'
-        } border rounded-lg p-3 pt-16 w-full relative`}
+        } border rounded-lg p-3 pt-14 w-full relative`}
       >
         <div className={`absolute top-4 right-4 z-50 flex gap-2`}>
           {!singleNote.code.trim() && (
@@ -928,10 +928,10 @@ function CodeBlock({
           placeholder="// Add your code here..."
           mode={selectedLanguage?.name.toLowerCase() || 'javascript'}
           theme={`${darkMode[1].isSelected ? 'monokai' : 'tomorrow'}`}
-          className={`bg-transparent p-4 mt-2`}
+          className={`bg-transparent p-4 `}
           name="blah2"
           width="100%"
-          height="300px"
+          height="310px"
           fontSize={14}
           lineHeight={19}
           showPrintMargin={false}
@@ -950,7 +950,7 @@ function CodeBlock({
         />
 
         {/* Complexity & Optimization */}
-        <div className="mt-3 flex items-center justify-between text-xs">
+        <div className="mt-2 flex items-center justify-between text-xs">
           <div
             className={`${
               darkMode[1].isSelected ? 'text-slate-300' : 'text-slate-600'

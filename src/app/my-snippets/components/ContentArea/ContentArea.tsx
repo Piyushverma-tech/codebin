@@ -61,7 +61,7 @@ function NotesArea() {
     <div className="mt-5 flex gap-4">
       <div
         className={`${
-          openContentNote ? `${isMobile ? 'w-full' : 'w-[50%]'}` : 'w-full'
+          openContentNote ? `${isMobile ? 'w-full' : 'w-[40%]'}` : 'w-full'
         }`}
       >
         <SwiperSelection />

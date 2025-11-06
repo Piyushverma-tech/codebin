@@ -115,7 +115,7 @@ function TagsWindow() {
         className={`${
           isMobile
             ? 'fixed left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-full z-50'
-            : 'fixed right-4 top-24 w-[400px] z-50'
+            : 'fixed left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] z-50'
         } ${
           darkMode[1].isSelected ? 'bg-zinc-900' : 'bg-gray-50 '
         } rounded-xl p-6 h-[580px] z-40 flex flex-col shadow-xl border ${
@@ -272,7 +272,7 @@ function SingleTag({ tag }: { tag: SingleTagType }) {
     >
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-4 min-w-0 flex-1">
-          <GripVertical className="h-5 w-5 text-gray-400 opacity-0 group-hover:opacity-100 transition-opacity flex-shrink-0" />
+          <GripVertical className="h-5 w-5 text-gray-400 transition-opacity flex-shrink-0" />
           <div className="h-2.5 w-2.5 rounded-full bg-violet-500 flex-shrink-0" />
           <div className="min-w-0 flex-1">
             <h3

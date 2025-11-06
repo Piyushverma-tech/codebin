@@ -231,7 +231,7 @@ function SingleNote({ note, id }: { note: SingleNoteType; id: string }) {
       className={`${
         darkMode[1].isSelected ? ' bg-zinc-800/20 text-white' : 'bg-gray-50'
       } ${
-        openContentNote ? 'w-[375px] sm:w-[585px]' : 'w-[385px]'
+        openContentNote ? 'w-[375px] sm:w-[485px]' : 'w-[385px]'
       } rounded-lg  h-[400px]`}
       onClick={() => setSelectedNote(note)}
     >
