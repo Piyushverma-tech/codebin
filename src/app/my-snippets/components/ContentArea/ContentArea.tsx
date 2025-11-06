@@ -16,12 +16,16 @@ function ContentArea() {
   } = useGlobalContext();
   return (
     <div
-      className={`sm:w-[80%] w-full h-auto min-h-screen pb-6 overflow-hidden  sm:p-4 ${
+      className={`sm:w-[80%] w-full h-screen flex flex-col overflow-hidden ${
         darkMode[1].isSelected ? ' bg-neutral-950 ' : 'bg-white/40'
       }`}
     >
-      <TopBar />
-      <NotesArea />
+      <div className="sticky top-0 z-30 px-4 mt-4">
+        <TopBar />
+      </div>
+      <div className="flex-1 overflow-hidden">
+        <NotesArea />
+      </div>
       <TagsWindow />
       <AddTagWindow />
     </div>
@@ -58,14 +62,18 @@ function NotesArea() {
     isMobileObject: { isMobile },
   } = useGlobalContext();
   return (
-    <div className="mt-5 flex gap-4">
+    <div className="mt-4 flex gap-4 h-full">
       <div
         className={`${
-          openContentNote ? `${isMobile ? 'w-full' : 'w-[40%]'}` : 'w-full'
-        }`}
+          openContentNote ? `${isMobile ? 'w-full' : 'w-[540px]'}` : 'w-full'
+        } h-full flex flex-col overflow-hidden`}
       >
-        <SwiperSelection />
-        <AllNotesSection />
+        <div className={`sticky top-0 z-20 px-4`}>
+          <SwiperSelection />
+        </div>
+        <div className="flex-1 overflow-y-auto px-4">
+          <AllNotesSection />
+        </div>
       </div>
       <ContentNote />
     </div>

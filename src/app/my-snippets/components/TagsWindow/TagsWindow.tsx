@@ -153,7 +153,7 @@ function TagsWindow() {
         </div>
 
         {/* Tags List - Fixed scrollable container */}
-        <div className="my-6 flex-1 min-h-0">
+        <div className="my-4 flex-1 min-h-0">
           <div className="h-full overflow-y-auto scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-transparent hover:scrollbar-thumb-gray-400">
             <div className="pr-2">
               {filterAllItemFromAllTags.length === 0 && (

@@ -242,7 +242,7 @@ function ContentNote() {
       className={` ${
         isMobile
           ? 'fixed left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-full py-6 z-50'
-          : 'w-[45%] fixed right-0'
+          : 'w-[44%] fixed right-2'
       } ${
         darkMode[1].isSelected
           ? 'bg-zinc-900 text-white'
@@ -355,7 +355,7 @@ function ContentNoteHeader({
             darkMode[1].isSelected
               ? ' bg-transparent text-neutral-300'
               : ' bg-gray-50 text-slate-500 '
-          } font-bold text-[24px] sm:text-center sm:ml-8 outline-none  h-10 overflow-y-auto resize-none  overflow-hidden w-full`}
+          } font-bold text-[24px] sm:text-center sm:ml-8 outline-none h-10 overflow-y-auto resize-none  overflow-hidden w-full`}
         />
       </div>
       <CloseOutlined
@@ -635,7 +635,7 @@ function Description({
           darkMode[1].isSelected ? ' text-slate-200' : ' text-slate-800'
         } text-sm  outline-none border w-full   ${
           isHoverd ? 'border-violet-500' : 'border-slate-400'
-        } rounded-lg p-2 h-24 resize-none`}
+        } rounded-lg p-2 h-[100px] resize-none`}
       />
     </div>
   );
@@ -931,7 +931,7 @@ function CodeBlock({
           className={`bg-transparent p-4 `}
           name="blah2"
           width="100%"
-          height="310px"
+          height="320px"
           fontSize={14}
           lineHeight={19}
           showPrintMargin={false}
@@ -962,7 +962,7 @@ function CodeBlock({
                   darkMode[1].isSelected ? 'text-slate-400' : 'text-slate-500'
                 }`}
               >
-                Time Complexity:
+                {isMobile ? 'Complexity:' : 'Time Complexity:'}
               </span>
               <span className="ml-1">{singleNote.timeComplexity || '—'}</span>
             </span>

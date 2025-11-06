@@ -231,7 +231,7 @@ function SingleNote({ note, id }: { note: SingleNoteType; id: string }) {
       className={`${
         darkMode[1].isSelected ? ' bg-zinc-800/20 text-white' : 'bg-gray-50'
       } ${
-        openContentNote ? 'w-[375px] sm:w-[485px]' : 'w-[385px]'
+        openContentNote ? 'w-[375px] sm:w-[510px]' : 'w-[385px]'
       } rounded-lg  h-[400px]`}
       onClick={() => setSelectedNote(note)}
     >
@@ -357,11 +357,11 @@ function NoteHeader({
 
 function NoteTags({ tags }: { tags: SingleTagType[] }) {
   return (
-    <div className="text-slate-500 text-[11px] flex-wrap flex gap-1 mt-2">
+    <div className="text-slate-500 text-[11px] flex gap-1 mt-2 overflow-x-auto whitespace-nowrap no-scrollbar">
       {tags.map((tag, index) => (
         <span
           key={tag._id || index || tag.name}
-          className="bg-violet-100 text-violet-600 p-1 rounded-md px-2"
+          className="bg-violet-100 text-violet-600 p-1 rounded-md px-2 inline-flex"
         >
           {tag.name}
         </span>
