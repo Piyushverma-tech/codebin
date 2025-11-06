@@ -13,7 +13,7 @@ function SearchBar() {
   return (
     <div
       className={`relative ml-3 sm:p-2 p-1 sm:w-[50%] w-[70%] rounded-3xl flex items-center gap-2 ${
-        darkMode[1].isSelected ? 'bg-neutral-950' : 'bg-neutral-100'
+        darkMode[1].isSelected ? 'bg-neutral-800 ' : 'bg-neutral-100'
       }`}
     >
       <SearchOutlined
@@ -29,7 +29,7 @@ function SearchBar() {
         placeholder="Search a snippet..."
         className={`w-[70%] outline-none text-[14px]    ${
           darkMode[1].isSelected
-            ? 'bg-neutral-950 text-slate-300'
+            ? 'bg-neutral-800 text-slate-300'
             : 'bg-neutral-100 text-slate-600'
         }`}
       />
@@ -55,7 +55,7 @@ function SearchBar() {
             sharedUserId
           )
         }
-        className="absolute  flex gap-2 px-2  rounded-3xl bg-gradient-to-r from-blue-600 to-violet-600 sm:py-[10px] py-[6px]  text-[13px] text-white right-0 items-center cursor-pointer select-none"
+        className="absolute  flex gap-2 px-2 font-semibold rounded-3xl bg-violet-500 sm:py-[10px] py-[6px]  text-[13px] text-white right-0 items-center cursor-pointer select-none"
       >
         <AISnippetIcon />
         <div className="text-md max-md:hidden">Snippet</div>

@@ -117,7 +117,7 @@ function TagsWindow() {
             ? 'fixed left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-full z-50'
             : 'fixed left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] z-50'
         } ${
-          darkMode[1].isSelected ? 'bg-zinc-900' : 'bg-gray-50 '
+          darkMode[1].isSelected ? ' bg-zinc-950' : 'bg-gray-50 '
         } rounded-xl p-6 h-[580px] z-40 flex flex-col shadow-xl border ${
           darkMode[1].isSelected ? 'border-zinc-700' : 'border-gray-200'
         }`}
@@ -266,7 +266,7 @@ function SingleTag({ tag }: { tag: SingleTagType }) {
     <div
       className={`group ${
         darkMode[1].isSelected
-          ? 'bg-neutral-900 border-zinc-500'
+          ? 'bg-neutral-900/40 border-zinc-500'
           : 'bg-white border-gray-100'
       } rounded-lg p-2 shadow-sm hover:shadow transition-all border`}
     >

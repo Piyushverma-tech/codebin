@@ -31,7 +31,7 @@ export default function Sidebar() {
         backdrop-blur-xl 
         ${
           darkMode[1].isSelected
-            ? 'bg-neutral-950 border-zinc-800 shadow-2xl shadow-violet-500/5'
+            ? 'bg-black/95 border-zinc-800 shadow-2xl shadow-violet-500/5'
             : 'bg-gray-50 border-slate-200 shadow-lg shadow-slate-300/50'
         }`}
       >

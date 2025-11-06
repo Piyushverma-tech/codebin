@@ -245,7 +245,7 @@ function ContentNote() {
           : 'w-[44%] fixed right-2'
       } ${
         darkMode[1].isSelected
-          ? 'bg-zinc-900 text-white'
+          ? 'sm:bg-zinc-900/50 bg-zinc-950 border-2 border-zinc-900 text-white'
           : 'bg-gray-50 text-slate-900'
       } px-3 rounded-lg  ${openContentNote ? 'block' : 'hidden'} h-[700px]`}
     >

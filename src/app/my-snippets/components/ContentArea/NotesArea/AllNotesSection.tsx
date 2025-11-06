@@ -229,7 +229,9 @@ function SingleNote({ note, id }: { note: SingleNoteType; id: string }) {
   return (
     <div
       className={`${
-        darkMode[1].isSelected ? ' bg-zinc-800/20 text-white' : 'bg-gray-50'
+        darkMode[1].isSelected
+          ? ' sm:bg-zinc-900/40 border-2 border-zinc-900 text-white'
+          : 'bg-gray-50'
       } ${
         openContentNote ? 'w-[375px] sm:w-[510px]' : 'w-[385px]'
       } rounded-lg  h-[400px]`}

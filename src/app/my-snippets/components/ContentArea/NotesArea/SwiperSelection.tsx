@@ -95,7 +95,9 @@ export default function SwiperSelection() {
   return (
     <div
       className={`${
-        darkMode[1].isSelected ? 'bg-zinc-900  text-white' : 'bg-gray-50'
+        darkMode[1].isSelected
+          ? 'sm:bg-zinc-900/50 bg-zinc-950 border-2 border-zinc-900  text-white'
+          : 'bg-gray-50'
       } p-1 rounded-lg flex gap-2`}
     >
       {/* Container for scrollable tags */}
@@ -135,7 +137,7 @@ export default function SwiperSelection() {
       {/* Add button */}
       <button
         onClick={() => setOpenNewTagWindow(true)}
-        className="bg-violet-500 p-2 text-sm rounded-md px-2 flex gap-1 items-center justify-center text-white flex-shrink-0"
+        className="bg-violet-500 p-2 text-sm rounded-md font-semibold px-2 flex gap-1 items-center justify-center text-white flex-shrink-0"
       >
         <PlusIcon size={18} />
         <span>Tag</span>
