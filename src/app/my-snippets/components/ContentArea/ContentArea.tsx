@@ -73,7 +73,7 @@ function NotesArea() {
         <div className={`sticky top-0 z-20 px-4`}>
           <SwiperSelection />
         </div>
-        <div className="flex-1 overflow-y-auto px-4">
+        <div className="flex-1 overflow-y-auto px-4 pb-8">
           <AllNotesSection />
         </div>
       </div>
