@@ -70,7 +70,7 @@ function NotesArea() {
           openContentNote ? `${isMobile ? 'w-full' : 'w-[540px]'}` : 'w-full'
         } h-full flex flex-col overflow-hidden`}
       >
-        <div className={`sticky top-0 z-20 px-4`}>
+        <div className={`sticky top-0 px-4`}>
           <SwiperSelection />
         </div>
         <div className="flex-1 overflow-y-auto px-4 pb-8">
