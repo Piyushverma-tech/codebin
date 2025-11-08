@@ -9,6 +9,7 @@ import AllNotesSection from './NotesArea/AllNotesSection';
 import TagsWindow from '../TagsWindow/TagsWindow';
 import AddTagWindow from '../TagsWindow/AddTagWindow';
 import ContentNote from '../NotePad/NotePad';
+import AddSnippetButton from './TopBar/AddSnippetButton';
 
 function ContentArea() {
   const {
@@ -20,7 +21,7 @@ function ContentArea() {
         darkMode[1].isSelected ? ' bg-black/95 ' : 'bg-white/40'
       }`}
     >
-      <div className="sticky top-0 z-30 px-4 mt-4">
+      <div className="sticky top-0 z-30 sm:px-4 mt-4">
         <TopBar />
       </div>
       <div className="flex-1 overflow-hidden">
@@ -48,6 +49,7 @@ function TopBar() {
     >
       <ProfileUser />
       <SearchBar />
+      <AddSnippetButton />
       <div className="flex gap-4 items-center">
         <div className="max-md:hidden">
           <DarkMode />
