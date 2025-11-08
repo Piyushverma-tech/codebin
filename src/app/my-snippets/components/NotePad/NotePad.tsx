@@ -162,6 +162,7 @@ function ContentNote() {
     undefined
   );
   const [saveError, setSaveError] = useState<string | null>(null);
+  const [Saved, setSaved] = useState<boolean>(true);
   const [hasInitialSave, setHasInitialSave] = useState(false);
 
   useEffect(() => {
@@ -176,6 +177,7 @@ function ContentNote() {
     () =>
       debounce(async (note: SingleNoteType, isNew: boolean) => {
         try {
+          setSaved(false);
           await saveNoteInDB(
             note,
             isNew,
@@ -184,6 +186,7 @@ function ContentNote() {
             setIsNewNote
           );
           setSaveError(null);
+          setSaved(true);
         } catch (error) {
           console.error('Error in debounced save:', error);
           setSaveError(
@@ -276,6 +279,7 @@ function ContentNote() {
             singleNote={singleNote}
             setSingleNote={setSingleNote}
             smartSave={smartSave}
+            Saved={Saved}
           />
         </div>
       )}
@@ -339,7 +343,7 @@ function ContentNoteHeader({
   }, [openContentNote]);
 
   return (
-    <div className="flex justify-between p-2 gap-8  mt-2">
+    <div className="flex justify-between p-2 gap-8  ">
       <div className="flex gap-4 w-full my-2 items-center">
         <textarea
           ref={textRef}
@@ -645,12 +649,14 @@ function CodeBlock({
   singleNote,
   setSingleNote,
   smartSave,
+  Saved,
 }: {
   singleNote: SingleNoteType;
   setSingleNote: React.Dispatch<
     React.SetStateAction<SingleNoteType | undefined>
   >;
   smartSave: (note: SingleNoteType, isNew: boolean) => void;
+  Saved: boolean;
 }) {
   const [isHoverd, setIsHoverd] = useState(false);
   const [isOpened, setIsOpened] = useState(false);
@@ -931,7 +937,7 @@ function CodeBlock({
           className={`bg-transparent p-4 `}
           name="blah2"
           width="100%"
-          height="320px"
+          height="318px"
           fontSize={14}
           lineHeight={19}
           showPrintMargin={false}
@@ -1010,6 +1016,9 @@ function CodeBlock({
           onCodeModified={handleChange}
         />
       </div>
+      <p className="text-sm text-gray-400 absolute bottom-6 right-6">
+        {Saved ? 'Saved' : 'Saving...'}
+      </p>
     </div>
   );
 
@@ -1142,6 +1151,9 @@ function CodeBlock({
             ))
           )}
         </div>
+        <p className="text-[10px] text-center text-gray-400">
+          Transform or Select a Language
+        </p>
       </div>
     );
   }
