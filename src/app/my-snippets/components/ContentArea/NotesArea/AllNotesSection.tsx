@@ -212,7 +212,12 @@ function SingleNote({ note, id }: { note: SingleNoteType; id: string }) {
   const {
     darkModeObject: { darkMode },
     openContentNoteObject: { openContentNote },
-    selectedNoteObject: { setSelectedNote },
+    selectedNoteObject: { selectedNote, setSelectedNote },
+    openContentNoteObject: { setOpenContentNote },
+    allNotesObject: { allNotes },
+    isNewNoteObject: { setIsNewNote },
+    isMobileObject: { isMobile },
+    openTagsWindowObject: { setOpenTagsWindow },
   } = useGlobalContext();
 
   const {
@@ -226,16 +231,42 @@ function SingleNote({ note, id }: { note: SingleNoteType; id: string }) {
     isTrash,
   } = note;
 
+  function clickedNote() {
+    const findTheNote = allNotes.find((note) => note._id === id);
+    if (findTheNote) {
+      setSelectedNote(findTheNote);
+    }
+    if (!isTrash) {
+      setOpenContentNote(true);
+      setOpenTagsWindow(false);
+    }
+
+    setIsNewNote(false);
+    if (!isMobile) {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+  }
+
   return (
     <div
       className={`${
         darkMode[1].isSelected
-          ? ' sm:bg-zinc-900/40 border-2 border-zinc-900 text-white'
-          : 'bg-gray-50'
+          ? `${
+              !isTrash && selectedNote?._id === id
+                ? 'bg-gradient-to-tr from-violet-600/25 via-violet-500/15 to-violet-400/15'
+                : 'hover:bg-neutral-700/50'
+            } text-white bg-neutral-800 border border-white/10`
+          : `${
+              !isTrash && selectedNote?._id === id
+                ? 'bg-gradient-to-tr from-violet-600/10 via-violet-500/15 to-violet-400/15'
+                : 'bg-gray-50 shadow-md hover:shadow-lg'
+            }`
       } ${
         openContentNote ? 'w-[375px] sm:w-[510px]' : 'w-[385px]'
-      } rounded-lg  h-[400px]`}
-      onClick={() => setSelectedNote(note)}
+      } rounded-lg  h-[400px]  ${
+        isTrash ? 'opacity-90' : ' cursor-pointer'
+      } flex flex-col justify-between hover:shadow-lg transition-shadow`}
+      onClick={() => clickedNote()}
     >
       <div className="h-24 px-4 py-2 mb-4">
         <NoteHeader
@@ -275,29 +306,8 @@ function NoteHeader({
 }) {
   const {
     darkModeObject: { darkMode },
-    openContentNoteObject: { setOpenContentNote },
-    allNotesObject: { allNotes, setAllNotes },
-    selectedNoteObject: { setSelectedNote },
-    isNewNoteObject: { setIsNewNote },
-    isMobileObject: { isMobile },
-    openTagsWindowObject: { setOpenTagsWindow },
+    allNotesObject: { setAllNotes },
   } = useGlobalContext();
-
-  function clickedNoteTitle() {
-    const findTheNote = allNotes.find((note) => note._id === id);
-    if (findTheNote) {
-      setSelectedNote(findTheNote);
-    }
-    if (!isTrashed) {
-      setOpenContentNote(true);
-      setOpenTagsWindow(false);
-    }
-
-    setIsNewNote(false);
-    if (!isMobile) {
-      window.scrollTo({ top: 0, behavior: 'smooth' });
-    }
-  }
 
   async function handleClickedCheckbox(e: React.MouseEvent) {
     e.stopPropagation();
@@ -333,10 +343,9 @@ function NoteHeader({
 
   return (
     <div
-      className={`flex justify-between items-center  ${
-        !isTrashed ? 'hover:text-violet-500 cursor-pointer' : 'mb-2'
-      } ${darkMode[1].isSelected ? 'text-neutral-300' : 'text-slate-600 '}`}
-      onClick={() => clickedNoteTitle()}
+      className={`flex justify-between items-center ${
+        darkMode[1].isSelected ? 'text-neutral-300' : 'text-slate-600 '
+      }`}
     >
       <span className={`font-bold text-lg  truncate `}>
         {truncateString(title, 40)}
@@ -398,7 +407,7 @@ function NoteDescription({ description }: { description: string }) {
     <div
       className={`${
         darkMode[1].isSelected ? 'text-white/70' : ''
-      } text-slate-600 text-[13px]  mt-2 line-clamp-2`}
+      } text-slate-600 text-[13px]  mb-2 line-clamp-2`}
     >
       <span className="pre-wrap">{truncateString(description, 100)}</span>
     </div>
@@ -576,7 +585,10 @@ function NoteFooter({
         {getLanguageIcon(language)}
         <span className="truncate">{capitalizeFirstOccurrence(language)}</span>
       </div>
-      <div className="flex gap-2 items-center">
+      <div
+        className="flex gap-2 items-center"
+        onClick={(e) => e.stopPropagation()}
+      >
         {!note.isTrash && (
           <IoDuplicate
             title="Duplicate note"

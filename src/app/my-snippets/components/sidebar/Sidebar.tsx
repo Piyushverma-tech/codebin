@@ -31,7 +31,7 @@ export default function Sidebar() {
         backdrop-blur-xl 
         ${
           darkMode[1].isSelected
-            ? 'bg-black/95 border-zinc-800 shadow-2xl shadow-violet-500/5'
+            ? 'bg-[#181818] border-zinc-800'
             : 'bg-gray-50 border-slate-200 shadow-lg shadow-slate-300/50'
         }`}
       >
@@ -120,7 +120,7 @@ function QuickLinks() {
             transition-all duration-200
             ${
               menu.isSelected
-                ? 'bg-violet-500 text-white  shadow-lg shadow-violet-500/30'
+                ? 'bg-violet-500 text-white'
                 : `text-slate-500 hover:bg-slate-100 
                    ${
                      darkMode[1].isSelected
@@ -198,7 +198,7 @@ function Languages() {
                 className={`flex items-center justify-between p-3 rounded-lg transition-all duration-200
             ${
               darkMode[1].isSelected
-                ? 'bg-zinc-900/50 hover:bg-zinc-800'
+                ? 'bg-neutral-800 hover:bg-neutral-700/50'
                 : 'bg-gray-100 hover:bg-slate-100'
             }`}
               >
@@ -206,7 +206,7 @@ function Languages() {
                   <div
                     className={`p-2 rounded ${
                       darkMode[1].isSelected
-                        ? 'bg-zinc-800 text-slate-300'
+                        ? 'bg-zinc-900 text-slate-300'
                         : 'bg-gray-200 text-slate-600'
                     }`}
                   >
@@ -227,7 +227,7 @@ function Languages() {
                   className={`text-xs font-medium px-2 py-1 rounded-full
               ${
                 darkMode[1].isSelected
-                  ? 'bg-zinc-800 text-slate-300'
+                  ? 'bg-zinc-900 text-slate-300'
                   : 'bg-gray-200 text-slate-600'
               }`}
                 >

@@ -63,7 +63,9 @@ function ConfirmationWindow() {
       <div className="flex min-h-full items-center justify-center p-4">
         <div
           className={`relative transform overflow-hidden rounded-lg ${
-            darkMode[1].isSelected ? 'bg-zinc-900' : 'bg-gray-50'
+            darkMode[1].isSelected
+              ? 'bg-neutral-800 border border-white/10'
+              : 'bg-gray-50'
           } px-4 pb-4 pt-5 text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-lg sm:p-6`}
         >
           {/* Content */}
@@ -94,7 +96,7 @@ function ConfirmationWindow() {
                 Delete Snippet
               </h3>
               <div className="mt-2">
-                <p className="text-sm text-gray-500">
+                <p className="text-sm text-gray-400">
                   Are you sure you want to delete this Snippet? This action
                   cannot be undone.
                 </p>

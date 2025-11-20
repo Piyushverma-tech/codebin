@@ -1,6 +1,8 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { useGlobalContext } from '@/ContextApi';
 import { toast } from 'react-hot-toast';
+import dynamic from 'next/dynamic';
+import { anOldHope, tomorrow } from 'react-code-blocks';
 
 interface ModifyCodeModalProps {
   isOpen: boolean;
@@ -9,6 +11,11 @@ interface ModifyCodeModalProps {
   language: string;
   onCodeModified: (newCode: string) => void;
 }
+
+const DynamicCodeBlock = dynamic(
+  () => import('react-code-blocks').then((mod) => mod.CodeBlock),
+  { ssr: false }
+);
 
 export default function ModifyCodeModal({
   isOpen,
@@ -86,31 +93,37 @@ export default function ModifyCodeModal({
       <div
         className={`${
           darkMode[1].isSelected
-            ? 'bg-zinc-900 text-white'
+            ? 'bg-neutral-800 border border-white/10 text-white'
             : 'bg-gray-50 text-slate-900'
         } p-6 rounded-lg w-[600px] max-w-[90%]`}
       >
         <h2
           className={`text-lg font-semibold mb-4 ${
-            darkMode[1].isSelected ? 'text-slate-300 ' : ' text-gray-800'
+            darkMode[1].isSelected ? 'text-slate-200 ' : ' text-gray-800'
           } `}
         >
           Modify Code with AI
         </h2>
 
         <div className="mb-4">
-          <h3 className="text-sm font-semibold mb-2">Current Code:</h3>
-          <pre
-            className={`${
-              darkMode[1].isSelected ? 'bg-zinc-800' : 'bg-gray-100'
-            } p-3 rounded-md text-sm overflow-auto max-h-[200px]`}
-          >
-            {currentCode}
-          </pre>
+          <h3 className="text-sm font-medium mb-2">Current Code:</h3>
+          <div className="h-[250px] overflow-y-auto ">
+            <DynamicCodeBlock
+              text={currentCode}
+              language={language.toLowerCase()}
+              showLineNumbers={false}
+              theme={darkMode[1].isSelected ? anOldHope : tomorrow}
+              customStyle={{
+                height: '100%',
+                overflowY: 'auto',
+                fontSize: '14px',
+              }}
+            />
+          </div>
         </div>
 
         <div className="mb-4">
-          <h3 className="text-sm font-semibold mb-2">
+          <h3 className="text-sm font-medium mb-2">
             Modification Instructions:
           </h3>
           <textarea

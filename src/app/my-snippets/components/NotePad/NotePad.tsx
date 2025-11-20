@@ -248,7 +248,7 @@ function ContentNote() {
           : 'w-[44%] fixed right-2'
       } ${
         darkMode[1].isSelected
-          ? 'sm:bg-zinc-900/50 bg-zinc-950 border-2 border-zinc-900 text-white'
+          ? 'sm:bg-neutral-800 bg-zinc-800 border border-white/10 text-white'
           : 'bg-gray-50 text-slate-900'
       } px-3 rounded-lg  ${openContentNote ? 'block' : 'hidden'} h-[700px]`}
     >
@@ -307,6 +307,7 @@ function ContentNoteHeader({
     allNotesObject: { setAllNotes },
     isNewNoteObject: { setIsNewNote },
     darkModeObject: { darkMode },
+    selectedNoteObject: { setSelectedNote },
   } = useGlobalContext();
 
   const textRef = useRef<HTMLTextAreaElement>(null);
@@ -366,6 +367,7 @@ function ContentNoteHeader({
         onClick={() => {
           setIsNewNote(false);
           setOpenContentNote(false);
+          setSelectedNote(null);
         }}
         className="text-slate-400 mt-[7px] cursor-pointer"
         sx={{ cursor: 'pointer', fontSize: '25' }}
@@ -530,7 +532,7 @@ function NoteTags({
         ref={menuRef}
         className={`${
           darkMode[1].isSelected
-            ? 'bg-neutral-900 border-gray-500'
+            ? 'bg-neutral-800 border-gray-500'
             : 'bg-violet-100 text-slate-400'
         } absolute top-10 shadow-lg w-[250px] p-3 rounded-md flex flex-col gap-2 z-50 border`}
       >
@@ -547,7 +549,7 @@ function NoteTags({
 
         <div
           className={`${
-            darkMode[1].isSelected ? 'bg-neutral-900' : 'bg-violet-100'
+            darkMode[1].isSelected ? 'bg-neutral-800' : 'bg-violet-100'
           } h-40 overflow-y-auto`}
         >
           {AllItemFromAllTags.length === 0 && (
@@ -636,7 +638,9 @@ function Description({
         value={singleNote.description || ''}
         placeholder="Add a description..."
         className={`bg-transparent ${
-          darkMode[1].isSelected ? ' text-slate-200' : ' text-slate-800'
+          darkMode[1].isSelected
+            ? ' text-slate-200 bg-zinc-900/80'
+            : ' text-slate-800'
         } text-sm  outline-none border w-full   ${
           isHoverd ? 'border-violet-500' : 'border-slate-400'
         } rounded-lg p-2 h-[100px] resize-none`}
@@ -862,8 +866,8 @@ function CodeBlock({
       <div
         onMouseEnter={() => setIsHoverd(true)}
         onMouseLeave={() => setIsHoverd(false)}
-        className={`${
-          isHoverd ? 'border-violet-500' : 'border-slate-400'
+        className={`${isHoverd ? 'border-violet-500' : 'border-slate-400'} ${
+          darkMode[1].isSelected ? 'bg-zinc-900/80' : 'bg-transparent'
         } border rounded-lg p-3 pt-14 w-full relative`}
       >
         <div className={`absolute top-4 right-4 z-50 flex gap-2`}>
@@ -1101,7 +1105,7 @@ function CodeBlock({
         ref={menuRef}
         className={`${
           darkMode[1].isSelected
-            ? 'bg-neutral-900 border-gray-500'
+            ? 'bg-neutral-800 border-gray-500'
             : 'bg-violet-100  text-slate-400'
         } absolute flex-col gap-2 p-3 w-[200px] rounded-md left-3 border shadow-lg z-50 flex`}
       >
@@ -1118,7 +1122,7 @@ function CodeBlock({
 
         <div
           className={` ${
-            darkMode[1].isSelected ? 'bg-neutral-900' : 'bg-violet-100'
+            darkMode[1].isSelected ? 'bg-neutral-800' : 'bg-violet-100'
           }  h-40  overflow-x-auto`}
         >
           {isConverting ? (

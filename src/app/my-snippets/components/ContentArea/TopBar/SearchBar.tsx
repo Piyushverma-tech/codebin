@@ -27,7 +27,7 @@ function SearchBar() {
         placeholder="Search a snippet..."
         className={`w-full outline-none text-[14px]    ${
           darkMode[1].isSelected
-            ? 'bg-neutral-800 text-slate-300'
+            ? 'bg-transparent text-slate-300'
             : 'bg-neutral-100 text-slate-600'
         }`}
       />

@@ -95,9 +95,7 @@ export default function SwiperSelection() {
   return (
     <div
       className={`${
-        darkMode[1].isSelected
-          ? 'sm:bg-zinc-900/50 bg-zinc-950 border-2 border-zinc-900  text-white'
-          : 'bg-gray-50'
+        darkMode[1].isSelected ? ' text-white' : 'bg-gray-50'
       } p-1 rounded-lg flex gap-2`}
     >
       {/* Container for scrollable tags */}
@@ -122,7 +120,7 @@ export default function SwiperSelection() {
                   className={`${
                     tagsSelected[index]
                       ? 'bg-violet-500 text-white'
-                      : ' text-gray-500'
+                      : ' bg-[#ffffff10] hover:bg-[#ffffff20] text-gray-400'
                   }  p-2 rounded-md text-center text-[12px] sm:text-sm font-medium cursor-pointer min-w-[50px] sm:min-w-[60px] flex-shrink-0`}
                   onClick={() => handleTagClick(index)}
                 >
