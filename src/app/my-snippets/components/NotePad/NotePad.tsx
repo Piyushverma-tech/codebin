@@ -910,13 +910,13 @@ function CodeBlock({
         {/* Language drop down */}
         <div
           onClick={() => setIsOpened(!isOpened)}
-          className={`flex gap-2 justify-between border border-slate-400 py-2 px-3 rounded-md items-center text-[12px] mt-3 absolute top-1 left-3 cursor-pointer`}
+          className={`${
+            darkMode[1].isSelected
+              ? 'text-slate-300 bg-neutral-800'
+              : 'text-slate-500'
+          }  flex gap-2 justify-between border border-slate-400 py-2 px-3 rounded-md items-center text-[12px] mt-3 absolute top-1 left-3 cursor-pointer`}
         >
-          <div
-            className={`${
-              darkMode[1].isSelected ? 'text-slate-300' : 'text-slate-500'
-            } flex gap-1 items-center`}
-          >
+          <div className={` flex gap-2 items-center`}>
             {selectedLanguage?.icon}
             <span className="mt-[1px]">{selectedLanguage?.name}</span>
           </div>
@@ -1066,6 +1066,7 @@ function CodeBlock({
     async function clickedLanguage(language: SingleCodeLanguageType) {
       if (singleNote.language === '') {
         setSelectedLanguage(programmingLanguages[0]);
+        alert('Please add the code fisrt');
         return;
       }
 
