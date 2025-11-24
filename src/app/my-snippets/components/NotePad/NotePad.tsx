@@ -248,7 +248,7 @@ function ContentNote() {
           : 'w-[44%] fixed right-2'
       } ${
         darkMode[1].isSelected
-          ? 'sm:bg-neutral-800 bg-zinc-800 border border-white/10 text-white'
+          ? 'bg-[#212121] border border-white/10 text-white'
           : 'bg-gray-50 text-slate-900'
       } px-3 rounded-lg  ${openContentNote ? 'block' : 'hidden'} h-[700px]`}
     >
@@ -532,7 +532,7 @@ function NoteTags({
         ref={menuRef}
         className={`${
           darkMode[1].isSelected
-            ? 'bg-neutral-800 border-gray-500'
+            ? 'bg-[#212121] border-gray-500'
             : 'bg-violet-100 text-slate-400'
         } absolute top-10 shadow-lg w-[250px] p-3 rounded-md flex flex-col gap-2 z-50 border`}
       >
@@ -547,11 +547,7 @@ function NoteTags({
           />
         </div>
 
-        <div
-          className={`${
-            darkMode[1].isSelected ? 'bg-neutral-800' : 'bg-violet-100'
-          } h-40 overflow-y-auto`}
-        >
+        <div className={`h-40 overflow-y-auto`}>
           {AllItemFromAllTags.length === 0 && (
             <span className="text-slate-400 text-center block py-2">
               Currently you don&apos;t have any tags, Add tags to use them.
@@ -912,7 +908,7 @@ function CodeBlock({
           onClick={() => setIsOpened(!isOpened)}
           className={`${
             darkMode[1].isSelected
-              ? 'text-slate-300 bg-neutral-800'
+              ? 'text-slate-300 bg-[#212121]'
               : 'text-slate-500'
           }  flex gap-2 justify-between border border-slate-400 py-2 px-3 rounded-md items-center text-[12px] mt-3 absolute top-1 left-3 cursor-pointer`}
         >
@@ -1106,7 +1102,7 @@ function CodeBlock({
         ref={menuRef}
         className={`${
           darkMode[1].isSelected
-            ? 'bg-neutral-800 border-gray-500'
+            ? 'bg-[#212121] border-gray-500'
             : 'bg-violet-100  text-slate-400'
         } absolute flex-col gap-2 p-3 w-[200px] rounded-md left-3 border shadow-lg z-50 flex`}
       >
@@ -1121,11 +1117,7 @@ function CodeBlock({
           />
         </div>
 
-        <div
-          className={` ${
-            darkMode[1].isSelected ? 'bg-neutral-800' : 'bg-violet-100'
-          }  h-40  overflow-x-auto`}
-        >
+        <div className={`h-40  overflow-x-auto`}>
           {isConverting ? (
             <div className="flex items-center justify-center h-full">
               <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-violet-500"></div>

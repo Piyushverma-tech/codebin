@@ -31,7 +31,7 @@ export default function Sidebar() {
         backdrop-blur-xl 
         ${
           darkMode[1].isSelected
-            ? 'bg-[#181818] border-zinc-800'
+            ? 'bg-[#1a1b1c] border-zinc-800'
             : 'bg-gray-50 border-slate-200 shadow-lg shadow-slate-300/50'
         }`}
       >
@@ -198,7 +198,7 @@ function Languages() {
                 className={`flex items-center justify-between p-3 rounded-lg transition-all duration-200
             ${
               darkMode[1].isSelected
-                ? 'bg-neutral-800 hover:bg-neutral-700/50'
+                ? 'bg-[#212121] hover:bg-neutral-700/30'
                 : 'bg-gray-100 hover:bg-slate-100'
             }`}
               >

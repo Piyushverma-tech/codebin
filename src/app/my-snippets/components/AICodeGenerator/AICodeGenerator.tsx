@@ -164,7 +164,7 @@ export default function AICodeGenerator({
       <div
         className={`${
           darkMode[1].isSelected
-            ? 'bg-neutral-800 border border-white/10 text-white'
+            ? 'bg-[#212121] border border-white/10 text-white'
             : 'bg-gray-50 text-slate-900'
         } p-6 rounded-lg w-[500px] max-w-[90%]`}
       >

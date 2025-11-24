@@ -18,7 +18,7 @@ function ContentArea() {
   return (
     <div
       className={`sm:w-[80%] w-full h-screen flex flex-col overflow-hidden ${
-        darkMode[1].isSelected ? ' bg-[#181818] ' : 'bg-white/40'
+        darkMode[1].isSelected ? ' bg-[#1a1b1c] ' : 'bg-white/40'
       }`}
     >
       <div className="sticky top-0 sm:px-4 mt-4">

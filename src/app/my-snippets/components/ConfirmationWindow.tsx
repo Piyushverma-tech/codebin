@@ -64,7 +64,7 @@ function ConfirmationWindow() {
         <div
           className={`relative transform overflow-hidden rounded-lg ${
             darkMode[1].isSelected
-              ? 'bg-neutral-800 border border-white/10'
+              ? 'bg-[#212121] border border-white/10'
               : 'bg-gray-50'
           } px-4 pb-4 pt-5 text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-lg sm:p-6`}
         >

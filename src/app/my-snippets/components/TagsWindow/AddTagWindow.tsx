@@ -103,7 +103,7 @@ function AddTagWindow() {
       <div
         className={`fixed left-1/2 top-1/3 -translate-x-1/2 -translate-y-1/2 w-full max-w-md ${
           darkMode[1].isSelected
-            ? 'bg-neutral-800 border border-white/10'
+            ? 'bg-[#212121] border border-white/10'
             : ' bg-gray-50'
         } rounded-xl shadow-xl p-6 z-50`}
         role="dialog"

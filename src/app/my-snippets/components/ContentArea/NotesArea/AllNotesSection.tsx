@@ -254,8 +254,8 @@ function SingleNote({ note, id }: { note: SingleNoteType; id: string }) {
           ? `${
               !isTrash && selectedNote?._id === id
                 ? 'bg-gradient-to-tr from-violet-600/25 via-violet-500/15 to-violet-400/15'
-                : 'hover:bg-neutral-700/50'
-            } text-white bg-neutral-800 border border-white/10`
+                : 'hover:bg-neutral-700/30'
+            } text-white bg-[#212121] border border-white/10`
           : `${
               !isTrash && selectedNote?._id === id
                 ? 'bg-gradient-to-tr from-violet-600/10 via-violet-500/15 to-violet-400/15'
