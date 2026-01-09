@@ -30,7 +30,7 @@ export async function POST(request: Request) {
 }\nRules:\n- "optimizationPercent" must be an integer 0-100 estimating how optimized this solution is vs a naive baseline for the same task.\n- If unsure, be conservative.\n- Do not include any extra text or markdown.\n\nCode:\n\n${code}`;
 
     const model = genAI.getGenerativeModel({
-      model: 'gemini-2.0-flash',
+      model: 'gemini-3-flash-preview',
       safetySettings: [
         {
           category: HarmCategory.HARM_CATEGORY_HARASSMENT,

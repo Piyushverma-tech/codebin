@@ -55,7 +55,7 @@ export async function POST(request: Request) {
     Provide only the JSON response, no additional text or markdown.`;
 
     const model = genAI.getGenerativeModel({
-      model: 'gemini-2.0-flash',
+      model: 'gemini-3-flash-preview',
       safetySettings: [
         {
           category: HarmCategory.HARM_CATEGORY_HARASSMENT,
